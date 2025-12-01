@@ -1,83 +1,83 @@
-# �� CodeHub - Full Stack Developer Productivity App
+# CodeHub - Full Stack Developer Productivity App
 
 ![CodeHub Dashboard](https://img.shields.io/badge/Status-Live-brightgreen)
 ![React](https://img.shields.io/badge/React-18.2.0-blue)
 ![Node.js](https://img.shields.io/badge/Node.js-20.11.0-green)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-14.0-blue)
 
-## 📋 Pregled
+## Overview
 
-CodeHub je moderna full-stack aplikacija dizajnirana za povećanje produktivnosti developera. Kombinuje task management, code snippet storage, Pomodoro timer i achievement sistem u jednu sveobuhvatnu platformu.
+CodeHub is a modern full-stack application designed to boost developer productivity. It combines task management, code snippet storage, Pomodoro timer, and an achievement system into one comprehensive platform.
 
-## ✨ Funkcionalnosti
+## Features
 
-### 🎯 Task Management
-- **Kreiranje i upravljanje taskovima** sa prioritetima (nizak, srednji, visok)
-- **Status tracking** (To-Do, Doing, Done)
-- **Due date management** sa kalendar prikazom
-- **Filtering i search** po statusu i prioritetu
-- **Real-time updates** sa drag & drop funkcionalnostima
+### Task Management
+- Create and manage tasks with priorities (low, medium, high)
+- Status tracking (To-Do, Doing, Done)
+- Due date management with calendar view
+- Filtering and search by status and priority
+- Real-time updates with drag and drop functionality
 
-### 💻 Code Snippets
-- **Syntax highlighting** za 8+ programskih jezika
-- **Organizacija po kategorijama** (JavaScript, TypeScript, Python, Java, C#, HTML, CSS, SQL)
-- **Quick search i filtering**
-- **Copy-to-clipboard** funkcionalnost
-- **Version control** za snippet-ove
+### Code Snippets
+- Syntax highlighting for 8+ programming languages
+- Organization by categories (JavaScript, TypeScript, Python, Java, C#, HTML, CSS, SQL)
+- Quick search and filtering
+- Copy-to-clipboard functionality
+- Version control for snippets
 
-### 🍅 Pomodoro Timer
-- **Customizable timer** (25min work, 5min break)
-- **Session tracking** sa statistikama
-- **Focus time analytics** sa grafikom
-- **Break reminders** sa notifikacijama
-- **Productivity insights**
+### Pomodoro Timer
+- Customizable timer (25min work, 5min break)
+- Session tracking with statistics
+- Focus time analytics with charts
+- Break reminders with notifications
+- Productivity insights
 
-### 🏆 Achievement System
-- **12 unique achievements** za motivaciju
-- **Progress tracking** sa procentima
-- **Unlock notifications** u real-time
-- **Gamification elements** za engagement
+### Achievement System
+- 12 unique achievements for motivation
+- Progress tracking with percentages
+- Real-time unlock notifications
+- Gamification elements for engagement
 
-### 📊 Analytics Dashboard
-- **Focus time charts** (7-day view)
-- **Task completion velocity**
-- **Productivity metrics**
-- **Personal statistics**
-- **Interactive calendar**
+### Analytics Dashboard
+- Focus time charts (7-day view)
+- Task completion velocity
+- Productivity metrics
+- Personal statistics
+- Interactive calendar
 
-## 🛠️ Tehnologije
+## Technologies
 
 ### Frontend
-- **React 18.2.0** - Modern UI library
-- **Vite** - Fast build tool
-- **React Router** - Client-side routing
-- **Recharts** - Data visualization
-- **React Syntax Highlighter** - Code display
-- **CSS3** - Custom styling system
+- React 18.2.0 - Modern UI library
+- Vite - Fast build tool
+- React Router - Client-side routing
+- Recharts - Data visualization
+- React Syntax Highlighter - Code display
+- CSS3 - Custom styling system
 
 ### Backend
-- **Node.js 20.11.0** - Runtime environment
-- **Express.js** - Web framework
-- **PostgreSQL 14** - Relational database
-- **JWT** - Authentication
-- **bcryptjs** - Password hashing
-- **CORS** - Cross-origin requests
+- Node.js 20.11.0 - Runtime environment
+- Express.js - Web framework
+- PostgreSQL 14 - Relational database
+- JWT - Authentication
+- bcryptjs - Password hashing
+- CORS - Cross-origin requests
 
-## 🚀 Brzo Pokretanje
+## Quick Start
 
-### 1. Instalacija
+### 1. Installation
 ```bash
 npm install
 ```
 
-### 2. Pokretanje
+### 2. Running
 ```bash
 npm run dev
 ```
 
-Aplikacija će biti dostupna na:
-- **Frontend**: http://localhost:5173
-- **Backend**: http://localhost:3001
+Application will be available at:
+- Frontend: http://localhost:5173
+- Backend: http://localhost:3001
 
 ### 3. Database Setup
 ```bash
@@ -85,25 +85,25 @@ cd server
 node scripts/setup-db.js
 ```
 
-## 📱 Korišćenje
+## Usage
 
-1. **Registracija** - Kreirajte novi nalog
-2. **Login** - Prijavite se
-3. **Dashboard** - Pregledajte produktivnost
-4. **Tasks** - Upravljajte taskovima
-5. **Snippets** - Sačuvajte kod
-6. **Pomodoro** - Fokusirajte se
+1. Registration - Create a new account
+2. Login - Sign in to your account
+3. Dashboard - View productivity metrics
+4. Tasks - Manage your tasks
+5. Snippets - Save code snippets
+6. Pomodoro - Focus on work sessions
 
-## 🎨 Screenshots
+## Screenshots
 
 ### Dashboard
-- Interaktivni grafikon fokus vremena
-- Statistike taskova
-- Achievement sistem
-- Kalendar prikaz
+- Interactive focus time chart
+- Task statistics
+- Achievement system
+- Calendar view
 
 ### Task Management
-- Drag & drop interface
+- Drag and drop interface
 - Priority system
 - Status tracking
 - Due date management
@@ -114,9 +114,9 @@ node scripts/setup-db.js
 - Search functionality
 - Edit/Delete options
 
-## 🔧 Development
+## Development
 
-### Struktura Projekta
+### Project Structure
 ```
 codehub-fullstack/
 ├── server/                 # Backend API
@@ -138,13 +138,13 @@ codehub-fullstack/
 
 ### Scripts
 ```bash
-npm run dev          # Pokretanje oba servera
-npm run dev:server   # Samo backend
-npm run dev:client   # Samo frontend
+npm run dev          # Run both servers
+npm run dev:server   # Backend only
+npm run dev:client   # Frontend only
 npm run build        # Production build
 ```
 
-## 📊 Database Schema
+## Database Schema
 
 ### Users
 - id, username, email, password_hash, created_at
@@ -158,7 +158,7 @@ npm run build        # Production build
 ### Focus Sessions
 - id, user_id, duration_minutes, created_at
 
-## 🚀 Deployment
+## Deployment
 
 ### Production Build
 ```bash
@@ -179,23 +179,16 @@ JWT_SECRET=your-production-secret
 PORT=3001
 ```
 
-## 🤝 Contributing
 
-1. Fork repository
-2. Create feature branch
-3. Commit changes
-4. Push to branch
-5. Open Pull Request
-
-## 📝 License
+## License
 
 MIT License - see LICENSE file for details
 
-## 👨‍💻 Autor
+## Author
 
-**Dimitrije Milenković**
+**Dimitrije Milenkovic**
 - GitHub: [@dimitrijemilenkovic](https://github.com/dimitrijemilenkovic)
 
 ---
 
-⭐ **Ako vam se sviđa projekat, ostavite zvezdu!** ⭐
+If you like this project, please give it a star!
