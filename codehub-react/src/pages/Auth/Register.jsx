@@ -29,13 +29,13 @@ export default function Register() {
     setError('')
 
     if (formData.password !== formData.confirmPassword) {
-      setError('Lozinke se ne poklapaju')
+      setError('Passwords do not match')
       setLoading(false)
       return
     }
 
     if (formData.password.length < 6) {
-      setError('Lozinka mora imati najmanje 6 karaktera')
+      setError('Password must be at least 6 characters')
       setLoading(false)
       return
     }
@@ -44,7 +44,7 @@ export default function Register() {
       await register(formData.username, formData.email, formData.password)
       navigate('/login')
     } catch (error) {
-      setError(error.message || 'Neuspešna registracija')
+      setError(error.message || 'Registration failed')
     } finally {
       setLoading(false)
     }
@@ -55,13 +55,13 @@ export default function Register() {
       <div className="auth-card">
         <div className="auth-header">
           <img className="brand-logo brand-logo--xlarge" src={logo} alt="CodeHub logo" />
-          <h1 className="auth-title">Napravi CodeHub nalog</h1>
-          <p className="auth-subtitle">Organizuj zadatke, snippete i fokus sesije na jednom mestu.</p>
+          <h1 className="auth-title">Create your CodeHub account</h1>
+          <p className="auth-subtitle">Organize tasks, snippets, and focus sessions in one workspace.</p>
         </div>
 
         <form onSubmit={handleSubmit} className="panel-grid">
           <div className="form-group">
-            <label htmlFor="username">Korisničko ime</label>
+            <label htmlFor="username">Username</label>
             <input
               type="text"
               id="username"
@@ -76,7 +76,7 @@ export default function Register() {
           </div>
 
           <div className="form-group">
-            <label htmlFor="email">Email adresa</label>
+            <label htmlFor="email">Email address</label>
             <input
               type="email"
               id="email"
@@ -85,13 +85,13 @@ export default function Register() {
               onChange={handleChange}
               required
               className="input"
-              placeholder="ime@firma.com"
+              placeholder="name@company.com"
               autoComplete="email"
             />
           </div>
 
           <div className="form-group">
-            <label htmlFor="password">Lozinka</label>
+            <label htmlFor="password">Password</label>
             <input
               type="password"
               id="password"
@@ -100,13 +100,13 @@ export default function Register() {
               onChange={handleChange}
               required
               className="input"
-              placeholder="Minimum 6 karaktera"
+              placeholder="Minimum 6 characters"
               autoComplete="new-password"
             />
           </div>
 
           <div className="form-group">
-            <label htmlFor="confirmPassword">Potvrda lozinke</label>
+            <label htmlFor="confirmPassword">Confirm password</label>
             <input
               type="password"
               id="confirmPassword"
@@ -115,7 +115,7 @@ export default function Register() {
               onChange={handleChange}
               required
               className="input"
-              placeholder="Ponovi lozinku"
+              placeholder="Repeat password"
               autoComplete="new-password"
             />
           </div>
@@ -123,12 +123,12 @@ export default function Register() {
           {error && <div className="error-message">{error}</div>}
 
           <button type="submit" className="btn btn-primary" disabled={loading}>
-            {loading ? 'Kreiranje...' : 'Kreiraj nalog'}
+            {loading ? 'Creating...' : 'Create account'}
           </button>
         </form>
 
         <p className="auth-link">
-          Već imaš nalog? <Link to="/login">Prijavi se</Link>
+          Already have an account? <Link to="/login">Sign in</Link>
         </p>
       </div>
     </div>

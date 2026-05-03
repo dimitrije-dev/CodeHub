@@ -16,9 +16,9 @@ function parseTokenProfile() {
     const data = JSON.parse(json)
 
     return {
-      name: data.name || data.username || 'CodeHub korisnik',
-      email: data.email || 'Nije definisano',
-      bio: 'Fokus na čist kod, dobar ritam rada i jasne isporuke.',
+      name: data.name || data.username || 'CodeHub User',
+      email: data.email || 'Not set',
+      bio: 'Focused on clean code, consistent execution, and clear delivery.',
     }
   } catch {
     return null
@@ -26,13 +26,13 @@ function parseTokenProfile() {
 }
 
 export default function Profile() {
-  usePageTitle('Profil')
+  usePageTitle('Profile')
 
   const { logout } = useAuth()
   const [user, setUser] = useState({
-    name: 'CodeHub korisnik',
-    email: 'Nije definisano',
-    bio: 'Fokus na čist kod, dobar ritam rada i jasne isporuke.',
+    name: 'CodeHub User',
+    email: 'Not set',
+    bio: 'Focused on clean code, consistent execution, and clear delivery.',
   })
   const [stats, setStats] = useState({ snippets: 0, tasks: 0, completed: 0 })
   const [loading, setLoading] = useState(true)
@@ -63,7 +63,7 @@ export default function Profile() {
           completed: tasks.filter((task) => task.status === 'done').length,
         })
       } catch (fetchError) {
-        if (mounted) setError(fetchError.message || 'Neuspešno učitavanje profila.')
+        if (mounted) setError(fetchError.message || 'Failed to load profile.')
       } finally {
         if (mounted) setLoading(false)
       }
@@ -100,13 +100,13 @@ export default function Profile() {
     setNotice('')
 
     if (!form.name.trim()) {
-      setError('Ime je obavezno.')
+      setError('Name is required.')
       return
     }
 
     setUser({ ...user, ...form })
     setEditMode(false)
-    setNotice('Profil je sačuvan lokalno. Backend endpoint za profil može biti sledeći korak.')
+    setNotice('Profile saved locally. Backend profile update endpoint can be connected next.')
   }
 
   async function handleChangePassword(event) {
@@ -115,26 +115,26 @@ export default function Profile() {
     setNotice('')
 
     if (!passwordForm.current || !passwordForm.next || !passwordForm.confirm) {
-      setError('Popuni sva polja za lozinku.')
+      setError('Please fill in all password fields.')
       return
     }
 
     if (passwordForm.next.length < 6) {
-      setError('Nova lozinka mora imati bar 6 karaktera.')
+      setError('New password must have at least 6 characters.')
       return
     }
 
     if (passwordForm.next !== passwordForm.confirm) {
-      setError('Potvrda lozinke se ne poklapa.')
+      setError('Password confirmation does not match.')
       return
     }
 
     setPasswordForm({ current: '', next: '', confirm: '' })
-    setNotice('Forma za lozinku je validna. Backend endpoint za promenu lozinke još treba povezati.')
+    setNotice('Password form is valid. Backend password-change endpoint still needs to be connected.')
   }
 
   if (loading) {
-    return <div className="card">Učitavanje profila...</div>
+    return <div className="card">Loading profile...</div>
   }
 
   return (
@@ -150,15 +150,15 @@ export default function Profile() {
 
         <div className="stat-grid profile-stat-grid">
           <div className="stat-tile">
-            <div className="stat-label">Taskovi</div>
+            <div className="stat-label">Tasks</div>
             <div className="stat-value metric-blue">{stats.tasks}</div>
           </div>
           <div className="stat-tile">
-            <div className="stat-label">Završeni</div>
+            <div className="stat-label">Completed</div>
             <div className="stat-value metric-green">{stats.completed}</div>
           </div>
           <div className="stat-tile">
-            <div className="stat-label">Snippeti</div>
+            <div className="stat-label">Snippets</div>
             <div className="stat-value metric-orange">{stats.snippets}</div>
           </div>
           <div className="stat-tile">
@@ -172,16 +172,16 @@ export default function Profile() {
         <article className="card panel-grid">
           <div className="page-header">
             <div>
-              <h2>Osnovne informacije</h2>
-              <p className="page-subtitle">Ažuriraj prikaz imena, email i kratku bio sekciju.</p>
+              <h2>Basic information</h2>
+              <p className="page-subtitle">Update your display name, email, and short bio.</p>
             </div>
             {!editMode ? (
               <button type="button" className="btn btn-outline" onClick={startEdit}>
-                Izmeni
+                Edit
               </button>
             ) : (
               <button type="button" className="btn btn-outline" onClick={cancelEdit}>
-                Otkaži
+                Cancel
               </button>
             )}
           </div>
@@ -189,7 +189,7 @@ export default function Profile() {
           <form className="panel-grid" onSubmit={handleUpdateProfile}>
             <div className="form-row">
               <div className="form-group">
-                <label htmlFor="profile-name">Ime</label>
+                <label htmlFor="profile-name">Name</label>
                 <input
                   id="profile-name"
                   className="input"
@@ -220,14 +220,14 @@ export default function Profile() {
                 value={form.bio}
                 onChange={(event) => setForm((previous) => ({ ...previous, bio: event.target.value }))}
                 disabled={!editMode}
-                placeholder="Dodaj kratki opis svog rada"
+                placeholder="Add a short description of your work"
               />
             </div>
 
             {editMode && (
               <div className="inline-actions">
-                <button type="submit" className="btn btn-primary">Sačuvaj profil</button>
-                <button type="button" className="btn btn-secondary" onClick={cancelEdit}>Vrati</button>
+                <button type="submit" className="btn btn-primary">Save profile</button>
+                <button type="button" className="btn btn-secondary" onClick={cancelEdit}>Revert</button>
               </div>
             )}
           </form>
@@ -235,13 +235,13 @@ export default function Profile() {
 
         <article className="card panel-grid">
           <div>
-            <h2>Bezbednost naloga</h2>
-            <p className="page-subtitle">Pripremljena forma za promenu lozinke.</p>
+            <h2>Account security</h2>
+            <p className="page-subtitle">Prepared form for password updates.</p>
           </div>
 
           <form className="panel-grid" onSubmit={handleChangePassword}>
             <div className="form-group">
-              <label htmlFor="password-current">Trenutna lozinka</label>
+              <label htmlFor="password-current">Current password</label>
               <input
                 id="password-current"
                 type="password"
@@ -253,7 +253,7 @@ export default function Profile() {
 
             <div className="form-row">
               <div className="form-group">
-                <label htmlFor="password-next">Nova lozinka</label>
+                <label htmlFor="password-next">New password</label>
                 <input
                   id="password-next"
                   type="password"
@@ -264,7 +264,7 @@ export default function Profile() {
               </div>
 
               <div className="form-group">
-                <label htmlFor="password-confirm">Potvrda nove lozinke</label>
+                <label htmlFor="password-confirm">Confirm new password</label>
                 <input
                   id="password-confirm"
                   type="password"
@@ -275,7 +275,7 @@ export default function Profile() {
               </div>
             </div>
 
-            <button type="submit" className="btn btn-primary">Proveri podatke</button>
+            <button type="submit" className="btn btn-primary">Validate form</button>
           </form>
         </article>
       </section>
@@ -285,12 +285,12 @@ export default function Profile() {
 
       <section className="card danger-zone panel-grid">
         <div>
-          <h3>Odjava</h3>
-          <p className="page-subtitle">Sigurno zatvori sesiju i vrati se na login.</p>
+          <h3>Sign out</h3>
+          <p className="page-subtitle">Securely close your session and return to login.</p>
         </div>
         <div className="inline-actions">
           <button type="button" className="btn btn-outline danger-button" onClick={logout}>
-            Odjavi se
+            Sign out
           </button>
         </div>
       </section>

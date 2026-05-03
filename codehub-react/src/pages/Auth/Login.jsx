@@ -33,7 +33,7 @@ export default function Login() {
       setAuth(response.token)
       navigate('/dashboard')
     } catch (error) {
-      setError(error.message || 'Neispravan email ili lozinka')
+      setError(error.message || 'Invalid email or password')
     } finally {
       setLoading(false)
     }
@@ -44,19 +44,19 @@ export default function Login() {
       <div className="auth-card">
         <div className="auth-header">
           <img className="brand-logo brand-logo--xlarge" src={logo} alt="CodeHub logo" />
-          <h1 className="auth-title">Dobrodošao nazad</h1>
-          <p className="auth-subtitle">Prijavi se i nastavi gde si stao.</p>
+          <h1 className="auth-title">Welcome back</h1>
+          <p className="auth-subtitle">Sign in and continue where you left off.</p>
         </div>
 
         <div className="auth-brand-highlight">
-          <div className="auth-brand-item">Jasan pregled rada i fokusa na jednom mestu</div>
-          <div className="auth-brand-item">Brže izvršavanje taskova bez prebacivanja alata</div>
-          <div className="auth-brand-item">Pouzdan ritam rada kroz pomodoro i metrike</div>
+          <div className="auth-brand-item">Clear visibility over execution and focus in one place</div>
+          <div className="auth-brand-item">Faster task delivery with less context switching</div>
+          <div className="auth-brand-item">Reliable work rhythm powered by pomodoro and metrics</div>
         </div>
 
         <form onSubmit={handleSubmit} className="panel-grid">
           <div className="form-group">
-            <label htmlFor="email">Email adresa</label>
+            <label htmlFor="email">Email address</label>
             <input
               type="email"
               id="email"
@@ -71,7 +71,7 @@ export default function Login() {
           </div>
 
           <div className="form-group">
-            <label htmlFor="password">Lozinka</label>
+            <label htmlFor="password">Password</label>
             <input
               type="password"
               id="password"
@@ -80,7 +80,7 @@ export default function Login() {
               onChange={handleChange}
               required
               className="input"
-              placeholder="Unesi lozinku"
+              placeholder="Enter your password"
               autoComplete="current-password"
             />
           </div>
@@ -88,16 +88,16 @@ export default function Login() {
           {error && <div className="error-message">{error}</div>}
 
           <button type="submit" className="btn btn-primary" disabled={loading}>
-            {loading ? 'Prijavljivanje...' : 'Prijavi se'}
+            {loading ? 'Signing in...' : 'Sign in'}
           </button>
         </form>
 
         <p className="auth-link">
-          Nemaš nalog? <Link to="/register">Napravi nalog</Link>
+          Don&apos;t have an account? <Link to="/register">Create one</Link>
         </p>
 
         <div className="auth-demo">
-          <strong>Demo nalog</strong>
+          <strong>Demo account</strong>
           <br />
           Email: demo@example.com
           <br />

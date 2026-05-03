@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { api } from '../services/api.js'
 
 const ACHIEVEMENT_LABELS = {
-  first_task: 'Prvi korak',
+  first_task: 'First Step',
   task_master: 'Task Master',
   snippet_wizard: 'Snippet Wizard',
   focus_champion: 'Focus Champion',
@@ -50,7 +50,7 @@ export default function QuickActions({ onTaskAdded }) {
           <div className="achievement-notification-content">
             <div style={{ fontSize: '1.2rem' }}>🏆</div>
             <div>
-              <div style={{ fontWeight: 800, fontSize: '0.78rem' }}>NOVI ACHIEVEMENT</div>
+              <div style={{ fontWeight: 800, fontSize: '0.78rem' }}>NEW ACHIEVEMENT</div>
               <div style={{ fontWeight: 700 }}>{ACHIEVEMENT_LABELS[achievementNotification] || achievementNotification}</div>
             </div>
           </div>
@@ -59,19 +59,19 @@ export default function QuickActions({ onTaskAdded }) {
 
       <div className="card quick-actions">
         <div className="dashboard-hero" style={{ gap: '10px' }}>
-          <h3 style={{ fontSize: '1rem' }}>Brza akcija</h3>
-          <p className="page-subtitle">Dodaj task u jednom potezu i nastavi fokusirano.</p>
+          <h3 style={{ fontSize: '1rem' }}>Quick action</h3>
+          <p className="page-subtitle">Add a task in one move and keep your flow going.</p>
         </div>
 
         <form onSubmit={addQuickTask} className="quick-task-form" style={{ marginTop: '12px' }}>
           <input
             className="input"
-            placeholder="Npr. Pripremi sprint plan"
+            placeholder="e.g. Prepare sprint planning notes"
             value={quickTask}
             onChange={(e) => setQuickTask(e.target.value)}
           />
           <button type="submit" className="btn btn-primary" disabled={loading || !quickTask.trim()}>
-            {loading ? 'Dodajem...' : 'Dodaj'}
+            {loading ? 'Adding...' : 'Add task'}
           </button>
         </form>
       </div>

@@ -4,8 +4,8 @@ export default function ProgressChart({ data, loading, onStartFocus }) {
   if (loading) {
     return (
       <div className="card chart-card">
-        <h3>Fokus minuti</h3>
-        <p>Učitavanje podataka...</p>
+        <h3>Focus minutes</h3>
+        <p>Loading data...</p>
       </div>
     )
   }
@@ -21,8 +21,8 @@ export default function ProgressChart({ data, loading, onStartFocus }) {
     return (
       <div className="card chart-card chart-empty">
         <div>
-          <h3>Fokus minuti</h3>
-          <p>Još nema fokus sesija. Pokreni prvi pomodoro i kreni da gradiš momentum.</p>
+          <h3>Focus minutes</h3>
+          <p>No focus sessions yet. Start your first pomodoro and begin building momentum.</p>
         </div>
         <div className="inline-actions">
           <button className="btn btn-primary" onClick={onStartFocus}>Start first focus session</button>
@@ -34,8 +34,8 @@ export default function ProgressChart({ data, loading, onStartFocus }) {
   return (
     <div className="card chart-card">
       <div>
-        <h3>Fokus minuti</h3>
-        <p>Ukupni minuti fokusa po danima, poslednjih 7 dana.</p>
+        <h3>Focus minutes</h3>
+        <p>Total daily focus minutes across the last 7 days.</p>
       </div>
 
       <ResponsiveContainer width="100%" height={250}>
@@ -61,7 +61,7 @@ export default function ProgressChart({ data, loading, onStartFocus }) {
               color: 'var(--text)',
               fontWeight: 700,
             }}
-            formatter={(value) => [value, 'minuta']}
+            formatter={(value) => [value, 'minutes']}
           />
           <Line
             type="monotone"

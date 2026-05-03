@@ -4,43 +4,43 @@ import { api } from '../services/api.js'
 const ACHIEVEMENTS = [
   {
     id: 'first_task',
-    title: 'Prvi korak',
-    description: 'Kreirao si svoj prvi task',
+    title: 'First Step',
+    description: 'Create your first task',
     icon: '🎯',
     rarity: 'common'
   },
   {
     id: 'task_master',
     title: 'Task Master',
-    description: 'Završio si 10 taskova',
+    description: 'Complete 10 tasks',
     icon: '👑',
     rarity: 'rare'
   },
   {
     id: 'snippet_wizard',
     title: 'Snippet Wizard',
-    description: 'Kreirao si 5 snippeta',
+    description: 'Create 5 snippets',
     icon: '🧙‍♂️',
     rarity: 'uncommon'
   },
   {
     id: 'focus_champion',
     title: 'Focus Champion',
-    description: 'Završio si 5 Pomodoro sesija',
+    description: 'Complete 5 Pomodoro sessions',
     icon: '🍅',
     rarity: 'rare'
   },
   {
     id: 'streak_warrior',
     title: 'Streak Warrior',
-    description: 'Radio si 3 dana zaredom',
+    description: 'Stay active for 3 days in a row',
     icon: '🔥',
     rarity: 'epic'
   },
   {
     id: 'productivity_god',
     title: 'Productivity God',
-    description: 'Završio si 50 taskova',
+    description: 'Complete 50 tasks',
     icon: '⚡',
     rarity: 'legendary'
   }
@@ -80,7 +80,7 @@ export default function Achievements({ stats }) {
   const unlockedAchievementObjects = ACHIEVEMENTS.filter(a => unlockedAchievements.includes(a.id))
 
   if (loading) {
-    return <div style={{ textAlign: 'center', padding: '24px' }}>Učitavanje achievement-a...</div>
+    return <div style={{ textAlign: 'center', padding: '24px' }}>Loading achievements...</div>
   }
 
   return (
@@ -122,7 +122,7 @@ export default function Achievements({ stats }) {
           color: 'var(--color-gray-500)',
           padding: '24px'
         }}>
-          Nema otključanih achievement-a. Nastavi da radiš da ih osvojiš! 🎯
+          No achievements unlocked yet. Keep building to earn them. 🎯
         </div>
       )}
     </div>

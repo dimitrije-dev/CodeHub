@@ -10,8 +10,8 @@ import logo from '../assets/codehub-logo.png'
 
 function MiniCalendar() {
   const now = new Date()
-  const monthNames = ['Januar', 'Februar', 'Mart', 'April', 'Maj', 'Jun', 'Jul', 'Avgust', 'Septembar', 'Oktobar', 'Novembar', 'Decembar']
-  const weekDays = ['P', 'U', 'S', 'Č', 'P', 'S', 'N']
+  const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+  const weekDays = ['M', 'T', 'W', 'T', 'F', 'S', 'S']
 
   const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate()
   const firstDay = new Date(now.getFullYear(), now.getMonth(), 1).getDay()
@@ -138,15 +138,15 @@ export default function Dashboard() {
       <section className="card hero-card dashboard-hero motion-card">
         <div className="dashboard-hero-layout">
           <div className="dashboard-hero-top">
-            <h1 className="dashboard-hero-title">Dobrodošao nazad</h1>
-            <p className="dashboard-hero-text">Centralni pregled rada, fokusa i napretka za ovu nedelju.</p>
+            <h1 className="dashboard-hero-title">Welcome back</h1>
+            <p className="dashboard-hero-text">Your central view of execution, focus, and progress this week.</p>
 
             <div className="dashboard-cta-row">
               <button className="btn btn-outline" onClick={() => navigate('/pomodoro')}>
-                Otvori pomodoro
+                Open Pomodoro
               </button>
               <button className="btn btn-primary" onClick={() => navigate('/tasks')}>
-                Novi task
+                New task
               </button>
             </div>
           </div>
@@ -167,15 +167,15 @@ export default function Dashboard() {
           <div className="stat-value metric-orange">{taskCounts.todo}</div>
         </button>
         <button className="stat-tile motion-card" onClick={() => navigate('/tasks', { state: { filter: 'doing' } })}>
-          <div className="stat-label">U radu</div>
+          <div className="stat-label">In progress</div>
           <div className="stat-value metric-blue">{taskCounts.doing}</div>
         </button>
         <button className="stat-tile motion-card" onClick={() => navigate('/tasks', { state: { filter: 'done' } })}>
-          <div className="stat-label">Završeno</div>
+          <div className="stat-label">Completed</div>
           <div className="stat-value metric-green">{taskCounts.done}</div>
         </button>
         <div className="stat-tile motion-card">
-          <div className="stat-label">Snippeti</div>
+          <div className="stat-label">Snippets</div>
           <div className="stat-value">{stats.totalSnippets}</div>
         </div>
       </section>
@@ -200,23 +200,23 @@ export default function Dashboard() {
           <QuickActions onTaskAdded={handleTaskAdded} />
 
           <div className="task-summary card">
-            <h3>Nedeljni sažetak</h3>
+            <h3>Weekly summary</h3>
             <div className="task-summary-card">
               <div className="task-summary-item">
-                <span className="task-summary-label">Ukupno taskova</span>
+                <span className="task-summary-label">Total tasks</span>
                 <span className="task-summary-value">{stats.totalTasks}</span>
               </div>
               <div className="task-summary-item">
-                <span className="task-summary-label">Završenih taskova</span>
+                <span className="task-summary-label">Completed tasks</span>
                 <span className="task-summary-value metric-green">{stats.completedTasks}</span>
               </div>
               <div className="task-summary-item">
-                <span className="task-summary-label">Fokus minuta (7 dana)</span>
+                <span className="task-summary-label">Focus minutes (7 days)</span>
                 <span className="task-summary-value metric-blue">{stats.focusMinutes}</span>
               </div>
               <div className="task-summary-item">
-                <span className="task-summary-label">Aktivni streak</span>
-                <span className="task-summary-value metric-orange">{stats.currentStreak} dana</span>
+                <span className="task-summary-label">Active streak</span>
+                <span className="task-summary-value metric-orange">{stats.currentStreak} days</span>
               </div>
             </div>
           </div>

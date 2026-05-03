@@ -5,111 +5,111 @@ import { api } from '../services/api.js'
 const ALL_ACHIEVEMENTS = [
   {
     id: 'first_task',
-    title: 'Prvi korak',
-    description: 'Kreirao si svoj prvi task',
+    title: 'First Step',
+    description: 'Create your first task',
     icon: '🎯',
     rarity: 'common',
-    tooltip: 'Počni svoju produktivnu putanju kreiranjem prvog taska.',
-    howToUnlock: 'Kreiraj svoj prvi task u Taskovi sekciji.',
+    tooltip: 'Kick off your productive workflow by creating your first task.',
+    howToUnlock: 'Create your first task in the Tasks section.',
   },
   {
     id: 'task_master',
     title: 'Task Master',
-    description: 'Završio si 10 taskova',
+    description: 'Complete 10 tasks',
     icon: '👑',
     rarity: 'rare',
-    tooltip: 'Dokazao si da možeš da završavaš taskove konzistentno.',
-    howToUnlock: 'Završi 10 taskova i označi ih kao Done.',
+    tooltip: 'You proved you can deliver tasks consistently.',
+    howToUnlock: 'Complete 10 tasks and mark them as Done.',
   },
   {
     id: 'snippet_wizard',
     title: 'Snippet Wizard',
-    description: 'Kreirao si 5 snippeta',
+    description: 'Create 5 snippets',
     icon: '🧙',
     rarity: 'uncommon',
-    tooltip: 'Postao si majstor čuvanja korisnog koda.',
-    howToUnlock: 'Kreiraj 5 snippeta u Snippeti sekciji.',
+    tooltip: 'You are building a reliable personal code library.',
+    howToUnlock: 'Create 5 snippets in the Snippets section.',
   },
   {
     id: 'focus_champion',
     title: 'Focus Champion',
-    description: 'Završio si 5 Pomodoro sesija',
+    description: 'Complete 5 Pomodoro sessions',
     icon: '🍅',
     rarity: 'rare',
-    tooltip: 'Uspešno održavaš fokus i tempo rada.',
-    howToUnlock: 'Završi 5 pomodoro sesija.',
+    tooltip: 'You are maintaining strong focus and delivery rhythm.',
+    howToUnlock: 'Complete 5 pomodoro sessions.',
   },
   {
     id: 'streak_warrior',
     title: 'Streak Warrior',
-    description: 'Radio si 3 dana zaredom',
+    description: 'Stay active for 3 days in a row',
     icon: '🔥',
     rarity: 'epic',
-    tooltip: 'Konzistentnost je ključ svakog napretka.',
-    howToUnlock: 'Koristi aplikaciju 3 dana zaredom.',
+    tooltip: 'Consistency is the core multiplier for real progress.',
+    howToUnlock: 'Use the app 3 days in a row.',
   },
   {
     id: 'productivity_god',
     title: 'Productivity God',
-    description: 'Završio si 50 taskova',
+    description: 'Complete 50 tasks',
     icon: '⚡',
     rarity: 'legendary',
-    tooltip: 'Ulaziš u elitni nivo produktivnosti.',
-    howToUnlock: 'Završi 50 taskova.',
+    tooltip: 'You are entering an elite level of execution.',
+    howToUnlock: 'Complete 50 tasks.',
   },
   {
     id: 'code_collector',
     title: 'Code Collector',
-    description: 'Kreirao si 20 snippeta',
+    description: 'Create 20 snippets',
     icon: '💎',
     rarity: 'epic',
-    tooltip: 'Tvoja baza koda postaje ozbiljan resurs.',
-    howToUnlock: 'Kreiraj 20 snippeta.',
+    tooltip: 'Your code base is becoming a serious productivity asset.',
+    howToUnlock: 'Create 20 snippets.',
   },
   {
     id: 'time_master',
     title: 'Time Master',
-    description: 'Završio si 25 Pomodoro sesija',
+    description: 'Complete 25 Pomodoro sessions',
     icon: '⏰',
     rarity: 'epic',
-    tooltip: 'Savladao si upravljanje vremenom.',
-    howToUnlock: 'Završi 25 pomodoro sesija.',
+    tooltip: 'You are mastering time management through focus discipline.',
+    howToUnlock: 'Complete 25 pomodoro sessions.',
   },
   {
     id: 'consistency_king',
     title: 'Consistency King',
-    description: 'Radio si 7 dana zaredom',
+    description: 'Stay active for 7 days in a row',
     icon: '🛡️',
     rarity: 'legendary',
-    tooltip: 'Nedeljna konzistentnost je najveći multiplikator.',
-    howToUnlock: 'Koristi aplikaciju 7 dana zaredom.',
+    tooltip: 'A full week of consistency is a major performance multiplier.',
+    howToUnlock: 'Use the app 7 days in a row.',
   },
   {
     id: 'speed_demon',
     title: 'Speed Demon',
-    description: 'Završio si 5 taskova u jednom danu',
+    description: 'Complete 5 tasks in one day',
     icon: '🚀',
     rarity: 'rare',
-    tooltip: 'Odličan ritam i brzina isporuke.',
-    howToUnlock: 'Završi 5 taskova u jednom danu.',
+    tooltip: 'Excellent pacing and delivery speed.',
+    howToUnlock: 'Complete 5 tasks in one day.',
   },
   {
     id: 'night_owl',
     title: 'Night Owl',
-    description: 'Radio si posle 22h',
+    description: 'Use the app after 10 PM',
     icon: '🦉',
     rarity: 'uncommon',
-    tooltip: 'Noćni rad - fokus bez buke.',
-    howToUnlock: 'Koristi aplikaciju posle 22h.',
+    tooltip: 'Night sessions: deep focus with fewer distractions.',
+    howToUnlock: 'Use the app after 10 PM.',
   },
   {
     id: 'early_bird',
     title: 'Early Bird',
-    description: 'Radio si pre 6h ujutru',
+    description: 'Use the app before 6 AM',
     icon: '🐦',
     rarity: 'uncommon',
-    tooltip: 'Jutarnji ritam i čist fokus.',
-    howToUnlock: 'Koristi aplikaciju pre 6h.',
+    tooltip: 'Early sessions with fresh energy and clean concentration.',
+    howToUnlock: 'Use the app before 6 AM.',
   },
 ]
 
@@ -143,7 +143,7 @@ export default function Achievements() {
         setUnlockedIds(ids)
       } catch (fetchError) {
         if (mounted) {
-          setError(fetchError.message || 'Neuspešno učitavanje achievement podataka.')
+          setError(fetchError.message || 'Failed to load achievement data.')
         }
       } finally {
         if (mounted) setLoading(false)
@@ -170,7 +170,7 @@ export default function Achievements() {
   const completion = Math.round((unlocked.length / ALL_ACHIEVEMENTS.length) * 100)
 
   if (loading) {
-    return <div className="card">Učitavanje achievement sekcije...</div>
+    return <div className="card">Loading achievements...</div>
   }
 
   return (
@@ -180,23 +180,23 @@ export default function Achievements() {
           <div>
             <h1 className="page-title">Achievements</h1>
             <p className="page-subtitle">
-              Prati napredak kroz ciljeve i otključavaj sledeće nivoe produktivnosti.
+              Track your progress through milestones and unlock the next level of productivity.
             </p>
           </div>
-          <span className="tag tag-medium">{completion}% kompletirano</span>
+          <span className="tag tag-medium">{completion}% completed</span>
         </div>
 
         <div className="stat-grid achievements-stat-grid">
           <div className="stat-tile">
-            <div className="stat-label">Otključani</div>
+            <div className="stat-label">Unlocked</div>
             <div className="stat-value metric-green">{unlocked.length}</div>
           </div>
           <div className="stat-tile">
-            <div className="stat-label">Zaključani</div>
+            <div className="stat-label">Locked</div>
             <div className="stat-value metric-orange">{locked.length}</div>
           </div>
           <div className="stat-tile">
-            <div className="stat-label">Ukupno</div>
+            <div className="stat-label">Total</div>
             <div className="stat-value metric-blue">{ALL_ACHIEVEMENTS.length}</div>
           </div>
         </div>
@@ -206,12 +206,12 @@ export default function Achievements() {
 
       <section className="card panel-grid">
         <div className="page-header">
-          <h2>Otključani</h2>
-          <span className="page-subtitle">Zarađeni bedževi</span>
+          <h2>Unlocked</h2>
+          <span className="page-subtitle">Earned badges</span>
         </div>
 
         {unlocked.length === 0 ? (
-          <div className="empty-state">Još nema otključanih achievement-a. Dodaj task i kreni seriju.</div>
+          <div className="empty-state">No achievements unlocked yet. Complete your first tasks to begin the streak.</div>
         ) : (
           <div className="achievement-grid">
             {unlocked.map((achievement) => (
@@ -237,8 +237,8 @@ export default function Achievements() {
 
       <section className="card panel-grid">
         <div className="page-header">
-          <h2>Zaključani</h2>
-          <span className="page-subtitle">Sledeći ciljevi</span>
+          <h2>Locked</h2>
+          <span className="page-subtitle">Next milestones</span>
         </div>
 
         <div className="achievement-grid">

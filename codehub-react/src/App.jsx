@@ -9,6 +9,7 @@ const Snippets = lazy(() => import('./pages/Snippets.jsx'))
 const Profile = lazy(() => import('./pages/Profile.jsx'))
 const Achievements = lazy(() => import('./pages/Achievements.jsx'))
 const Pomodoro = lazy(() => import('./pages/Pomodoro.jsx'))
+const AIPrompts = lazy(() => import('./pages/AIPrompts.jsx'))
 const Login = lazy(() => import('./pages/Auth/Login.jsx'))
 const Register = lazy(() => import('./pages/Auth/Register.jsx'))
 
@@ -21,7 +22,7 @@ function AppLoader() {
   return (
     <div className="auth-container">
       <div className="auth-card" style={{ textAlign: 'center' }}>
-        Učitavanje...
+        Loading...
       </div>
     </div>
   )
@@ -78,6 +79,14 @@ export default function App() {
             element={(
               <RequireAuth>
                 <Pomodoro />
+              </RequireAuth>
+            )}
+          />
+          <Route
+            path="/ai-prompts"
+            element={(
+              <RequireAuth>
+                <AIPrompts />
               </RequireAuth>
             )}
           />

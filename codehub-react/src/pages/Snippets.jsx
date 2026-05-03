@@ -4,7 +4,7 @@ import { api } from '../services/api.js'
 import { usePageTitle } from '../hooks/usePageTitle.js'
 
 export default function Snippets() {
-  usePageTitle('Snippeti')
+  usePageTitle('Snippets')
 
   const [snippets, setSnippets] = useState([])
   const [loading, setLoading] = useState(true)
@@ -99,15 +99,15 @@ export default function Snippets() {
       <section className="card panel-grid">
         <div className="page-header">
           <div>
-            <h1 className="page-title">Snippeti</h1>
-            <p className="page-subtitle">Sačuvaj često korišćen kod i pronađi ga za nekoliko sekundi.</p>
+            <h1 className="page-title">Snippets</h1>
+            <p className="page-subtitle">Store reusable code and find it in seconds.</p>
           </div>
         </div>
 
         <form onSubmit={handleAdd} className="snippet-form">
           <input
             className="input"
-            placeholder="Naslov snippeta"
+            placeholder="Snippet title"
             value={form.title}
             onChange={(event) => setForm((prev) => ({ ...prev, title: event.target.value }))}
           />
@@ -129,13 +129,13 @@ export default function Snippets() {
 
           <textarea
             className="textarea"
-            placeholder="Kod snippeta..."
+            placeholder="Snippet code..."
             rows={8}
             value={form.code}
             onChange={(event) => setForm((prev) => ({ ...prev, code: event.target.value }))}
           />
 
-          <button type="submit" className="btn btn-primary">Sačuvaj snippet</button>
+          <button type="submit" className="btn btn-primary">Save snippet</button>
         </form>
 
         {error && <div className="error-message">{error}</div>}
@@ -143,10 +143,10 @@ export default function Snippets() {
 
       <section className="card panel-grid">
         <div className="page-header">
-          <h3>Biblioteka</h3>
+          <h3>Library</h3>
           <input
             className="input"
-            placeholder="Pretraži po naslovu, jeziku ili kodu"
+            placeholder="Search by title, language, or code"
             value={query}
             onChange={(event) => setQuery(event.target.value)}
             style={{ maxWidth: '360px' }}
@@ -154,9 +154,9 @@ export default function Snippets() {
         </div>
 
         {loading ? (
-          <div>Učitavanje snippeta...</div>
+          <div>Loading snippets...</div>
         ) : filteredSnippets.length === 0 ? (
-          <div className="empty-state">Nema snippeta za prikaz.</div>
+          <div className="empty-state">No snippets available.</div>
         ) : (
           <div className="data-grid">
             {filteredSnippets.map((snippet) => (
@@ -193,9 +193,9 @@ export default function Snippets() {
                       />
 
                       <div className="inline-actions">
-                        <button type="submit" className="btn btn-primary">Sačuvaj</button>
+                        <button type="submit" className="btn btn-primary">Save</button>
                         <button type="button" className="btn btn-secondary" onClick={() => setEditingId(null)}>
-                          Otkaži
+                          Cancel
                         </button>
                       </div>
                     </form>

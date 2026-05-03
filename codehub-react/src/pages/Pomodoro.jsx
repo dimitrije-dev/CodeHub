@@ -84,7 +84,7 @@ export default function Pomodoro() {
       try {
         await api.post('/api/focus-sessions', { minutes: workMinutes })
       } catch {
-        setError('Sesija je završena, ali čuvanje fokusa na server nije uspelo.')
+        setError('Session completed, but saving focus data to the server failed.')
       }
 
       setSessionCount((previous) => previous + 1)
@@ -161,13 +161,13 @@ export default function Pomodoro() {
       <section className="card hero-card panel-grid">
         <div className="page-header">
           <div>
-            <h1 className="page-title">Pomodoro fokus</h1>
+            <h1 className="page-title">Pomodoro Focus</h1>
             <p className="page-subtitle">
-              Radi u jasnim intervalima i prati koliko fokusa si stvarno odradio.
+              Work in clear intervals and track your real focus output.
             </p>
           </div>
           <span className={`tag ${mode === 'focus' ? 'tag-medium' : 'tag-low'}`}>
-            {mode === 'focus' ? 'Radna sesija' : 'Pauza'}
+            {mode === 'focus' ? 'Work session' : 'Break'}
           </span>
         </div>
 
@@ -180,15 +180,15 @@ export default function Pomodoro() {
         <div className="inline-actions" style={{ justifyContent: 'center' }}>
           {!isRunning ? (
             <button type="button" className="btn btn-primary" onClick={startTimer}>
-              Pokreni
+              Start
             </button>
           ) : (
             <button type="button" className="btn btn-secondary" onClick={pauseTimer}>
-              Pauziraj
+              Pause
             </button>
           )}
           <button type="button" className="btn btn-outline" onClick={resetTimer}>
-            Resetuj
+            Reset
           </button>
         </div>
 
@@ -197,7 +197,7 @@ export default function Pomodoro() {
 
       <section className="card pomodoro-settings">
         <div className="panel-grid">
-          <h3>Dužina rada</h3>
+          <h3>Work duration</h3>
           <div className="pomodoro-row">
             {WORK_PRESETS.map((minutes) => (
               <button
@@ -214,7 +214,7 @@ export default function Pomodoro() {
         </div>
 
         <div className="panel-grid">
-          <h3>Dužina pauze</h3>
+          <h3>Break duration</h3>
           <div className="pomodoro-row">
             {BREAK_PRESETS.map((minutes) => (
               <button
@@ -234,27 +234,27 @@ export default function Pomodoro() {
       <section className="pomodoro-stats">
         <article className="pomodoro-stat card">
           <div className="pomodoro-stat-value">{sessionCount}</div>
-          <div className="pomodoro-stat-label">Završene sesije</div>
+          <div className="pomodoro-stat-label">Completed sessions</div>
         </article>
 
         <article className="pomodoro-stat card">
           <div className="pomodoro-stat-value">{totalMinutes}</div>
-          <div className="pomodoro-stat-label">Ukupno fokus minuta</div>
+          <div className="pomodoro-stat-label">Total focus minutes</div>
         </article>
 
         <article className="pomodoro-stat card">
-          <div className="pomodoro-stat-value">{isRunning ? 'Aktivan' : 'Spreman'}</div>
-          <div className="pomodoro-stat-label">Status timera</div>
+          <div className="pomodoro-stat-value">{isRunning ? 'Active' : 'Ready'}</div>
+          <div className="pomodoro-stat-label">Timer status</div>
         </article>
       </section>
 
       <section className="card pomodoro-guide">
-        <h3>Kako da koristiš ovaj režim</h3>
+        <h3>How to use this mode</h3>
         <ul>
-          <li>Izaberi trajanje rada i pauze pre pokretanja sesije.</li>
-          <li>Tokom rada drži fokus na jednom zadatku bez prebacivanja.</li>
-          <li>Kada sesija istekne, pauza počinje automatski.</li>
-          <li>Po završetku pauze timer staje i čeka tvoj novi start.</li>
+          <li>Choose work and break duration before starting the session.</li>
+          <li>During work mode, stay on one task without context switching.</li>
+          <li>When the work timer ends, the break starts automatically.</li>
+          <li>After the break finishes, the timer waits for your next start.</li>
         </ul>
       </section>
     </div>

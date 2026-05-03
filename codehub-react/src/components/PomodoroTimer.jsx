@@ -71,7 +71,7 @@ export default function PomodoroTimer() {
 
   return (
     <div className="card panel-grid" style={{ textAlign: 'center' }}>
-      <h3>{isBreak ? 'Pauza' : 'Pomodoro Timer'}</h3>
+      <h3>{isBreak ? 'Break' : 'Pomodoro Timer'}</h3>
 
       <div className="pomodoro-display" style={{ fontSize: 'clamp(2rem, 7vw, 3.8rem)' }}>
         {formatTime(timeLeft)}
@@ -79,24 +79,24 @@ export default function PomodoroTimer() {
 
       <div className="inline-actions" style={{ justifyContent: 'center' }}>
         {!isRunning ? (
-          <button className="btn btn-primary" onClick={startTimer}>Pokreni</button>
+          <button className="btn btn-primary" onClick={startTimer}>Start</button>
         ) : (
-          <button className="btn btn-secondary" onClick={pauseTimer}>Pauziraj</button>
+          <button className="btn btn-secondary" onClick={pauseTimer}>Pause</button>
         )}
-        <button className="btn btn-outline" onClick={resetTimer}>Resetuj</button>
+        <button className="btn btn-outline" onClick={resetTimer}>Reset</button>
       </div>
 
       <div className="pomodoro-stats">
         <div className="pomodoro-stat">
           <div className="pomodoro-stat-value">{sessionCount}</div>
-          <div className="pomodoro-stat-label">Sesije</div>
+          <div className="pomodoro-stat-label">Sessions</div>
         </div>
         <div className="pomodoro-stat">
           <div className="pomodoro-stat-value">{totalMinutes}</div>
-          <div className="pomodoro-stat-label">Minuti</div>
+          <div className="pomodoro-stat-label">Minutes</div>
         </div>
         <div className="pomodoro-stat">
-          <div className="pomodoro-stat-value">{isRunning ? 'Aktivno' : 'Spremno'}</div>
+          <div className="pomodoro-stat-value">{isRunning ? 'Active' : 'Ready'}</div>
           <div className="pomodoro-stat-label">Status</div>
         </div>
       </div>

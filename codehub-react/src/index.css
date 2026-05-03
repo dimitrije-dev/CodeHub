@@ -131,6 +131,26 @@ a {
 .topbar-title-group {
   display: grid;
   gap: 2px;
+  position: relative;
+}
+
+.mobile-menu-button {
+  display: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-muted);
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  margin-bottom: 6px;
+}
+
+.mobile-menu-button:hover {
+  border-color: var(--brand);
+  color: var(--brand);
 }
 
 .topbar-kicker {
@@ -180,6 +200,7 @@ a {
   flex-direction: column;
   padding: 18px 14px;
   transition: background 0.3s ease, padding 0.3s ease, border-color 0.3s ease;
+  z-index: 45;
 }
 
 .sidebar-header {
@@ -324,6 +345,10 @@ a {
 
 .sidebar-collapsed .sidebar-link {
   gap: 0;
+}
+
+.mobile-nav-overlay {
+  display: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -782,12 +807,69 @@ select.input:focus {
 @media (max-width: 900px) {
   .app-shell,
   .app-shell.sidebar-collapsed {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .sidebar {
-    position: static;
-    height: auto;
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    height: 100dvh;
+    width: min(82vw, 320px);
+    transform: translateX(-100%);
+    box-shadow: 0 24px 48px rgba(0, 0, 0, 0.24);
+    transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .sidebar.mobile-open {
+    transform: translateX(0);
+  }
+
+  .app-shell.sidebar-collapsed .sidebar,
+  .app-shell.sidebar-collapsed .sidebar.mobile-open {
+    width: min(82vw, 320px);
+  }
+
+  .app-shell.sidebar-collapsed .brand-copy,
+  .app-shell.sidebar-collapsed .sidebar-link span {
+    display: block;
+  }
+
+  .app-shell.sidebar-collapsed .sidebar-link {
+    justify-content: flex-start;
+    gap: 12px;
+  }
+
+  .app-shell.sidebar-collapsed .brand {
+    justify-content: flex-start;
+  }
+
+  .app-shell.sidebar-collapsed .brand-logo {
+    width: 50px;
+    height: 50px;
+    outline-width: 8px;
+  }
+
+  .sidebar-toggle {
+    display: none;
+  }
+
+  .mobile-nav-open .mobile-nav-overlay {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(7, 15, 26, 0.4);
+    border: 0;
+    z-index: 40;
+  }
+
+  .sidebar-header {
+    margin-bottom: 14px;
+  }
+
+  .mobile-menu-button {
+    display: inline-flex;
   }
 
   .container-page {
@@ -812,5 +894,13 @@ select.input:focus {
 
   .auth-card {
     padding: 22px;
+  }
+
+  .topbar-kicker {
+    font-size: 0.68rem;
+  }
+
+  .topbar-subtitle {
+    font-size: 0.78rem;
   }
 }

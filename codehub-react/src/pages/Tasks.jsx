@@ -4,7 +4,7 @@ import { api } from '../services/api.js'
 import { usePageTitle } from '../hooks/usePageTitle.js'
 
 export default function Tasks() {
-  usePageTitle('Taskovi')
+  usePageTitle('Tasks')
 
   const [tasks, setTasks] = useState([])
   const [loading, setLoading] = useState(true)
@@ -108,11 +108,11 @@ export default function Tasks() {
       <section className="card panel-grid">
         <div className="page-header">
           <div>
-            <h1 className="page-title">Taskovi</h1>
-            <p className="page-subtitle">Organizuj posao po prioritetu i statusu.</p>
+            <h1 className="page-title">Tasks</h1>
+            <p className="page-subtitle">Organize your work by priority and progress status.</p>
           </div>
           <button className="btn btn-primary" onClick={() => setShowForm((value) => !value)}>
-            {showForm ? 'Zatvori formu' : 'Dodaj task'}
+            {showForm ? 'Close form' : 'Add task'}
           </button>
         </div>
 
@@ -123,7 +123,7 @@ export default function Tasks() {
               className={`status-chip ${filter === status ? 'active' : ''}`}
               onClick={() => setFilter(status)}
             >
-              {status === 'all' ? 'Svi' : status} ({counters[status]})
+              {status === 'all' ? 'All' : status} ({counters[status]})
             </button>
           ))}
         </div>
@@ -133,18 +133,18 @@ export default function Tasks() {
 
       {showForm && (
         <section className="card panel-grid">
-          <h3>Novi task</h3>
+          <h3>New task</h3>
           <form onSubmit={addTask} className="panel-grid">
             <input
               className="input"
-              placeholder="Naslov taska"
+              placeholder="Task title"
               value={form.title}
               onChange={(event) => setForm((prev) => ({ ...prev, title: event.target.value }))}
             />
 
             <textarea
               className="textarea"
-              placeholder="Kratak opis ili sledeći koraci"
+              placeholder="Short description or next steps"
               value={form.description}
               onChange={(event) => setForm((prev) => ({ ...prev, description: event.target.value }))}
             />
@@ -155,9 +155,9 @@ export default function Tasks() {
                 value={form.priority}
                 onChange={(event) => setForm((prev) => ({ ...prev, priority: event.target.value }))}
               >
-                <option value="low">Nizak prioritet</option>
-                <option value="medium">Srednji prioritet</option>
-                <option value="high">Visok prioritet</option>
+                <option value="low">Low priority</option>
+                <option value="medium">Medium priority</option>
+                <option value="high">High priority</option>
               </select>
               <input
                 type="date"
@@ -167,15 +167,15 @@ export default function Tasks() {
               />
             </div>
 
-            <button type="submit" className="btn btn-primary">Sačuvaj task</button>
+            <button type="submit" className="btn btn-primary">Save task</button>
           </form>
         </section>
       )}
 
       {loading ? (
-        <div className="card">Učitavanje taskova...</div>
+        <div className="card">Loading tasks...</div>
       ) : filteredTasks.length === 0 ? (
-        <div className="card empty-state">Nema taskova za odabrani filter.</div>
+        <div className="card empty-state">No tasks found for this filter.</div>
       ) : (
         <section className="data-grid">
           {filteredTasks.map((task) => (
@@ -191,8 +191,8 @@ export default function Tasks() {
                   <div className={`task-title ${task.status === 'done' ? 'done' : ''}`}>{task.title}</div>
                   {task.description && <p className="task-description">{task.description}</p>}
                   <div className="task-meta">
-                    {task.due_date && <span>Rok: {new Date(task.due_date).toLocaleDateString('sr-RS')}</span>}
-                    <span>Kreirano: {new Date(task.created_at).toLocaleDateString('sr-RS')}</span>
+                    {task.due_date && <span>Due: {new Date(task.due_date).toLocaleDateString('en-GB')}</span>}
+                    <span>Created: {new Date(task.created_at).toLocaleDateString('en-GB')}</span>
                   </div>
                 </div>
 
@@ -215,21 +215,21 @@ export default function Tasks() {
                   className="btn btn-outline"
                   onClick={() => setSelectedTask((prev) => (prev === task.id ? null : task.id))}
                 >
-                  {selectedTask === task.id ? 'Sakrij detalje' : 'Detalji'}
+                  {selectedTask === task.id ? 'Hide details' : 'Details'}
                 </button>
 
                 <button className="btn btn-outline" style={{ color: 'var(--danger)' }} onClick={() => removeTask(task.id)}>
-                  Obriši
+                  Delete
                 </button>
               </div>
 
               {selectedTask === task.id && (
                 <div className="task-details">
                   <div>Status: {task.status}</div>
-                  <div>Prioritet: {task.priority}</div>
-                  <div>Kreiran: {new Date(task.created_at).toLocaleString('sr-RS')}</div>
-                  {task.updated_at && <div>Ažuriran: {new Date(task.updated_at).toLocaleString('sr-RS')}</div>}
-                  {task.due_date && <div>Rok: {new Date(task.due_date).toLocaleDateString('sr-RS')}</div>}
+                  <div>Priority: {task.priority}</div>
+                  <div>Created: {new Date(task.created_at).toLocaleString('en-GB')}</div>
+                  {task.updated_at && <div>Updated: {new Date(task.updated_at).toLocaleString('en-GB')}</div>}
+                  {task.due_date && <div>Due: {new Date(task.due_date).toLocaleDateString('en-GB')}</div>}
                 </div>
               )}
             </article>

@@ -4,8 +4,8 @@ export default function VelocityChart({ data, loading, onOpenTasks }) {
   if (loading) {
     return (
       <div className="card chart-card">
-        <h3>Završeni taskovi</h3>
-        <p>Učitavanje podataka...</p>
+        <h3>Completed tasks</h3>
+        <p>Loading data...</p>
       </div>
     )
   }
@@ -21,11 +21,11 @@ export default function VelocityChart({ data, loading, onOpenTasks }) {
     return (
       <div className="card chart-card chart-empty">
         <div>
-          <h3>Završeni taskovi</h3>
-          <p>Nema podataka za prikaz. Dodaj i završi prvi task da otključaš trend.</p>
+          <h3>Completed tasks</h3>
+          <p>No chart data yet. Create and finish your first task to unlock the trend line.</p>
         </div>
         <div className="inline-actions">
-          <button className="btn btn-primary" onClick={onOpenTasks}>Otvori taskove</button>
+          <button className="btn btn-primary" onClick={onOpenTasks}>Open tasks</button>
         </div>
       </div>
     )
@@ -34,8 +34,8 @@ export default function VelocityChart({ data, loading, onOpenTasks }) {
   return (
     <div className="card chart-card">
       <div>
-        <h3>Završeni taskovi</h3>
-        <p>Dnevni broj završenih taskova u poslednjih 7 dana.</p>
+        <h3>Completed tasks</h3>
+        <p>Daily completed task count over the last 7 days.</p>
       </div>
 
       <ResponsiveContainer width="100%" height={250}>
@@ -61,7 +61,7 @@ export default function VelocityChart({ data, loading, onOpenTasks }) {
               color: 'var(--text)',
               fontWeight: 700,
             }}
-            formatter={(value) => [value, 'taskova']}
+            formatter={(value) => [value, 'tasks']}
           />
           <Line
             type="monotone"
