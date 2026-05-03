@@ -2,7 +2,7 @@
   <img src="docs/assets/codehub-banner.png" alt="CodeHub Banner" width="100%" />
 </p>
 
-<h1 align="center">CodeHub 2.0</h1>
+<h1 align="center">CodeHub</h1>
 <p align="center"><strong>Organize projects, track momentum, and ship faster with focus.</strong></p>
 
 <p align="center">
@@ -21,17 +21,16 @@ It combines task management, snippet organization, Pomodoro focus sessions, and 
 
 You can plan your day, stay in focus blocks, track momentum, and keep reusable code close, without juggling multiple tools.
 
-## Why CodeHub 2.0 Is Better
-CodeHub 2.0 is a major polish and stability release focused on real daily usage.
+## Technical Improvements In This Release
+This release introduces a full frontend stabilization and architecture-level cleanup.
 
-- Upgraded dashboard experience with cleaner hierarchy and better visual clarity.
-- Modernized pages across login, tasks, snippets, focus, achievements, and profile.
-- Improved UX consistency with a unified design system, spacing, and responsive behavior.
-- Better runtime stability with lint-clean frontend and production build validation.
-- Faster loading strategy via route-level lazy loading and optimized snippet highlighting bundle.
-- Cleaner auth behavior and more predictable state handling for login/logout flows.
-
-In short: fewer rough edges, clearer flow, and a product that feels ready for serious iteration.
+- Refactored UI structure into a consistent design system with shared layout, spacing, and reusable component classes.
+- Reworked key pages (`Dashboard`, `Tasks`, `Snippets`, `Pomodoro`, `Achievements`, `Profile`) to reduce inline styles and improve maintainability.
+- Integrated route-level lazy loading in the app router to reduce initial bundle pressure and improve startup behavior.
+- Optimized syntax highlighting by switching to selective language registration instead of shipping heavier default parsing paths.
+- Normalized auth state handling (`useSyncExternalStore` flow + storage synchronization) for more predictable login/logout behavior.
+- Fixed linting and state management issues across the frontend and validated production build output.
+- Added project asset structure for branded docs visuals (`docs/assets`) and app identity consistency.
 
 ## Core Experience
 - **Dashboard Command Center**: quick overview of work, focus, progress, and momentum.
@@ -119,12 +118,11 @@ cp server/.env.example server/.env
 - Add export/import workflows for productivity history.
 - Prepare deployment templates and production observability layer.
 
-## Contributing
-Contributions are welcome.
-Open an issue for ideas, improvements, or bug reports, then follow up with a focused pull request.
+## Release Note
+CodeHub has been fully refreshed in this iteration (v2.0 level update), with major UX, frontend architecture, and stability improvements.
 
 ## Final Note
 <p align="center">
   <img src="docs/assets/codehub-logo.png" alt="CodeHub Logo" width="120" />
 </p>
-<p align="center"><strong>CodeHub 2.0 is built for momentum. Keep building.</strong></p>
+<p align="center"><strong>CodeHub is built for momentum. Keep building.</strong></p>
