@@ -174,10 +174,10 @@ export default function Pomodoro() {
         <div className="pomodoro-display">{formatTime(timeLeft)}</div>
 
         <div className="pomodoro-progress" role="progressbar" aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(progress)}>
-          <div style={{ width: `${progress}%` }} />
+          <div className="pomodoro-progress-bar" style={{ '--progress-width': `${progress}%` }} />
         </div>
 
-        <div className="inline-actions" style={{ justifyContent: 'center' }}>
+        <div className="inline-actions inline-actions-centered">
           {!isRunning ? (
             <button type="button" className="btn btn-primary" onClick={startTimer}>
               Start

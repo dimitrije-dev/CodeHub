@@ -80,7 +80,7 @@ export default function Achievements({ stats }) {
   const unlockedAchievementObjects = ACHIEVEMENTS.filter(a => unlockedAchievements.includes(a.id))
 
   if (loading) {
-    return <div style={{ textAlign: 'center', padding: '24px' }}>Loading achievements...</div>
+    return <div className="achievement-mini-empty">Loading achievements...</div>
   }
 
   return (
@@ -99,11 +99,7 @@ export default function Achievements({ stats }) {
       )}
 
       {/* Achievements Grid */}
-      <div style={{ 
-        display: 'grid', 
-        gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', 
-        gap: '12px' 
-      }}>
+      <div className="achievement-mini-grid">
         {unlockedAchievementObjects.map(achievement => (
           <div 
             key={achievement.id} 
@@ -117,11 +113,7 @@ export default function Achievements({ stats }) {
       </div>
 
       {unlockedAchievementObjects.length === 0 && (
-        <div style={{ 
-          textAlign: 'center', 
-          color: 'var(--color-gray-500)',
-          padding: '24px'
-        }}>
+        <div className="achievement-mini-empty">
           No achievements unlocked yet. Keep building to earn them. 🎯
         </div>
       )}

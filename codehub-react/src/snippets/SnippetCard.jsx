@@ -40,7 +40,7 @@ export default function SnippetCard({ snippet, onEdit, onDelete }) {
 
         <div className="snippet-actions">
           <button className="btn btn-outline" onClick={onEdit}>Edit</button>
-          <button className="btn btn-outline" style={{ color: 'var(--danger)' }} onClick={onDelete}>Delete</button>
+          <button className="btn btn-outline btn-danger-outline" onClick={onDelete}>Delete</button>
         </div>
       </div>
 

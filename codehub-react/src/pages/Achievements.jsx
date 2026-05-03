@@ -114,11 +114,11 @@ const ALL_ACHIEVEMENTS = [
 ]
 
 const rarityConfig = {
-  common: { label: 'Common', color: '#8d9caf' },
-  uncommon: { label: 'Uncommon', color: '#2fba84' },
-  rare: { label: 'Rare', color: '#2e8fff' },
-  epic: { label: 'Epic', color: '#7d58d8' },
-  legendary: { label: 'Legendary', color: '#de8c1c' },
+  common: { label: 'Common' },
+  uncommon: { label: 'Uncommon' },
+  rare: { label: 'Rare' },
+  epic: { label: 'Epic' },
+  legendary: { label: 'Legendary' },
 }
 
 export default function Achievements() {
@@ -225,7 +225,7 @@ export default function Achievements() {
                   <div className="achievement-title">{achievement.title}</div>
                   <div className="achievement-description">{achievement.description}</div>
                   <div className="achievement-footnote">{achievement.howToUnlock}</div>
-                  <div className="achievement-rarity" style={{ color: rarityConfig[achievement.rarity].color }}>
+                  <div className={`achievement-rarity achievement-rarity-${achievement.rarity}`}>
                     {rarityConfig[achievement.rarity].label}
                   </div>
                 </div>

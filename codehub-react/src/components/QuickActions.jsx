@@ -48,22 +48,22 @@ export default function QuickActions({ onTaskAdded }) {
       {achievementNotification && (
         <div className="achievement-notification" role="status">
           <div className="achievement-notification-content">
-            <div style={{ fontSize: '1.2rem' }}>🏆</div>
+            <div className="achievement-toast-icon">🏆</div>
             <div>
-              <div style={{ fontWeight: 800, fontSize: '0.78rem' }}>NEW ACHIEVEMENT</div>
-              <div style={{ fontWeight: 700 }}>{ACHIEVEMENT_LABELS[achievementNotification] || achievementNotification}</div>
+              <div className="achievement-toast-label">NEW ACHIEVEMENT</div>
+              <div className="achievement-toast-name">{ACHIEVEMENT_LABELS[achievementNotification] || achievementNotification}</div>
             </div>
           </div>
         </div>
       )}
 
       <div className="card quick-actions">
-        <div className="dashboard-hero" style={{ gap: '10px' }}>
-          <h3 style={{ fontSize: '1rem' }}>Quick action</h3>
+        <div className="dashboard-hero quick-actions-head">
+          <h3>Quick action</h3>
           <p className="page-subtitle">Add a task in one move and keep your flow going.</p>
         </div>
 
-        <form onSubmit={addQuickTask} className="quick-task-form" style={{ marginTop: '12px' }}>
+        <form onSubmit={addQuickTask} className="quick-task-form quick-actions-form">
           <input
             className="input"
             placeholder="e.g. Prepare sprint planning notes"

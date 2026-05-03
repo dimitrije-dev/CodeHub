@@ -70,14 +70,14 @@ export default function PomodoroTimer() {
   }
 
   return (
-    <div className="card panel-grid" style={{ textAlign: 'center' }}>
+    <div className="card panel-grid pomodoro-timer-card">
       <h3>{isBreak ? 'Break' : 'Pomodoro Timer'}</h3>
 
-      <div className="pomodoro-display" style={{ fontSize: 'clamp(2rem, 7vw, 3.8rem)' }}>
+      <div className="pomodoro-display pomodoro-timer-display">
         {formatTime(timeLeft)}
       </div>
 
-      <div className="inline-actions" style={{ justifyContent: 'center' }}>
+      <div className="inline-actions inline-actions-centered">
         {!isRunning ? (
           <button className="btn btn-primary" onClick={startTimer}>Start</button>
         ) : (

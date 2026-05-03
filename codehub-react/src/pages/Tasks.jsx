@@ -116,7 +116,7 @@ export default function Tasks() {
           </button>
         </div>
 
-        <div className="inline-actions" style={{ gap: '8px' }}>
+        <div className="inline-actions inline-actions-tight">
           {['all', 'todo', 'doing', 'done'].map((status) => (
             <button
               key={status}
@@ -201,10 +201,9 @@ export default function Tasks() {
 
               <div className="task-actions">
                 <select
-                  className="input"
+                  className="input task-status-select"
                   value={task.status}
                   onChange={(event) => updateStatus(task.id, event.target.value)}
-                  style={{ width: '130px' }}
                 >
                   <option value="todo">To-Do</option>
                   <option value="doing">Doing</option>
@@ -218,7 +217,7 @@ export default function Tasks() {
                   {selectedTask === task.id ? 'Hide details' : 'Details'}
                 </button>
 
-                <button className="btn btn-outline" style={{ color: 'var(--danger)' }} onClick={() => removeTask(task.id)}>
+                <button className="btn btn-outline btn-danger-outline" onClick={() => removeTask(task.id)}>
                   Delete
                 </button>
               </div>

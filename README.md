@@ -39,6 +39,22 @@ This release introduces a full frontend stabilization and architecture-level cle
 - **Focus Engine**: Pomodoro cycles with tracked focus minutes.
 - **Achievement Layer**: visible progress markers that encourage consistency.
 
+## UI Preview
+### Dashboard Theme Comparison
+| Light Theme | Dark Theme |
+| --- | --- |
+| ![CodeHub Dashboard Light](docs/assets/screenshots/dashboard-light.png) | ![CodeHub Dashboard Dark](docs/assets/screenshots/dashboard-dark.png) |
+
+### Feature Screenshots
+#### Tasks
+![CodeHub Tasks Page](docs/assets/screenshots/tasks.png)
+
+#### Snippets
+![CodeHub Snippets Page](docs/assets/screenshots/snippets.png)
+
+#### Pomodoro
+![CodeHub Pomodoro Page](docs/assets/screenshots/pomodoro.png)
+
 ## Architecture At A Glance
 CodeHub follows a clean full-stack structure with a React client, Express API, and PostgreSQL persistence.
 

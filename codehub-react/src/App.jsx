@@ -21,7 +21,7 @@ function RequireAuth({ children }) {
 function AppLoader() {
   return (
     <div className="auth-container">
-      <div className="auth-card" style={{ textAlign: 'center' }}>
+      <div className="auth-card text-center">
         Loading...
       </div>
     </div>

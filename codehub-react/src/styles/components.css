@@ -1,6 +1,6 @@
 .dashboard-hero {
   display: grid;
-  gap: 16px;
+  gap: var(--space-4);
 }
 
 .dashboard-motion > .motion-card {
@@ -35,13 +35,13 @@
 .dashboard-hero-layout {
   display: grid;
   grid-template-columns: 1.35fr 1fr;
-  gap: 16px;
+  gap: var(--space-4);
   align-items: stretch;
 }
 
 .dashboard-hero-top {
   display: grid;
-  gap: 14px;
+  gap: var(--space-3);
   align-content: center;
 }
 
@@ -53,14 +53,14 @@
 
 .dashboard-hero-text {
   color: var(--text-muted);
-  font-size: 0.95rem;
+  font-size: var(--font-md);
   max-width: 64ch;
 }
 
 .dashboard-cta-row {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: var(--space-2);
 }
 
 .dashboard-brand-block {
@@ -101,12 +101,12 @@
 .quick-task-form {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
-  gap: 10px;
+  gap: var(--space-2);
 }
 
 .task-summary-card {
   display: grid;
-  gap: 10px;
+  gap: var(--space-2);
 }
 
 .task-summary-item {
@@ -121,7 +121,7 @@
 
 .task-summary-label {
   color: var(--text-muted);
-  font-size: 0.86rem;
+  font-size: var(--font-sm);
   font-weight: 700;
 }
 
@@ -131,11 +131,11 @@
 
 .task-card {
   display: grid;
-  gap: 12px;
+  gap: var(--space-3);
   border: 1px solid var(--border);
   background: var(--surface);
   border-radius: 14px;
-  padding: 14px;
+  padding: var(--space-3);
 }
 
 .task-main-row {
@@ -167,36 +167,40 @@
 
 .task-meta {
   display: flex;
-  gap: 10px;
+  gap: var(--space-2);
   flex-wrap: wrap;
   color: var(--text-muted);
-  font-size: 0.8rem;
+  font-size: var(--font-xs);
 }
 
 .task-actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: var(--space-1);
   justify-content: flex-end;
+}
+
+.task-status-select {
+  width: 130px;
 }
 
 .task-details {
   border-top: 1px dashed var(--border);
-  padding-top: 10px;
+  padding-top: var(--space-2);
   color: var(--text-muted);
-  font-size: 0.84rem;
+  font-size: var(--font-sm);
   display: grid;
   gap: 4px;
 }
 
 .panel-grid {
   display: grid;
-  gap: 14px;
+  gap: var(--space-3);
 }
 
 .snippet-form {
   display: grid;
-  gap: 10px;
+  gap: var(--space-2);
 }
 
 .snippet-card {
@@ -249,7 +253,7 @@
 
 .chart-card p {
   color: var(--text-muted);
-  font-size: 0.9rem;
+  font-size: var(--font-md);
 }
 
 .chart-empty {
@@ -264,13 +268,13 @@
 .achievement-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 12px;
+  gap: var(--space-3);
 }
 
 .achievement {
   border: 1px solid var(--border);
   border-radius: 14px;
-  padding: 12px;
+  padding: var(--space-3);
   display: flex;
   gap: 10px;
   align-items: flex-start;
@@ -306,22 +310,28 @@
 }
 
 .achievement-description {
-  font-size: 0.82rem;
+  font-size: var(--font-sm);
   color: var(--text-muted);
 }
 
 .achievement-footnote {
   margin-top: 6px;
-  font-size: 0.78rem;
+  font-size: var(--font-xs);
   line-height: 1.45;
   color: var(--text-muted);
 }
 
 .achievement-rarity {
   margin-top: 4px;
-  font-size: 0.72rem;
+  font-size: var(--font-xs);
   font-weight: 800;
 }
+
+.achievement-rarity-common { color: #8d9caf; }
+.achievement-rarity-uncommon { color: #2fba84; }
+.achievement-rarity-rare { color: #2e8fff; }
+.achievement-rarity-epic { color: #7d58d8; }
+.achievement-rarity-legendary { color: #de8c1c; }
 
 .achievements-stat-grid {
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -330,7 +340,7 @@
 .profile-layout {
   display: grid;
   grid-template-columns: 1.25fr 1fr;
-  gap: 14px;
+  gap: var(--space-3);
 }
 
 .profile-stat-grid {
@@ -343,7 +353,7 @@
   color: var(--success);
   border-radius: 12px;
   padding: 10px 12px;
-  font-size: 0.86rem;
+  font-size: var(--font-sm);
   font-weight: 700;
 }
 
@@ -370,7 +380,7 @@
 
 .achievement-mini-title {
   margin-top: 4px;
-  font-size: 0.76rem;
+  font-size: var(--font-xs);
   font-weight: 700;
   color: var(--text-muted);
 }
@@ -380,9 +390,42 @@
   border-radius: 12px;
   padding: 12px;
   color: var(--text-muted);
-  font-size: 0.84rem;
+  font-size: var(--font-sm);
   text-align: center;
   background: var(--surface-soft);
+}
+
+.achievement-mini-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: var(--space-3);
+}
+
+.achievement-mini-empty {
+  text-align: center;
+  color: var(--text-muted);
+  padding: 24px;
+}
+
+.quick-actions-head {
+  gap: var(--space-2);
+}
+
+.quick-actions-form {
+  margin-top: 12px;
+}
+
+.achievement-toast-icon {
+  font-size: 1.2rem;
+}
+
+.achievement-toast-label {
+  font-weight: 800;
+  font-size: var(--font-xs);
+}
+
+.achievement-toast-name {
+  font-weight: 700;
 }
 
 .quick-actions {
@@ -397,7 +440,7 @@
 
 .pomodoro-layout {
   display: grid;
-  gap: 16px;
+  gap: var(--space-4);
 }
 
 .pomodoro-display {
@@ -424,13 +467,13 @@
 
 .pomodoro-settings {
   display: grid;
-  gap: 14px;
+  gap: var(--space-3);
 }
 
 .pomodoro-row {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: var(--space-1);
 }
 
 .pomodoro-row .btn {
@@ -440,15 +483,17 @@
 .pomodoro-stats {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 10px;
+  gap: var(--space-2);
 }
 
 .pomodoro-stat {
   border: 1px solid var(--border);
   border-radius: 12px;
-  padding: 12px;
+  padding: var(--space-3);
   text-align: center;
   background: var(--surface-soft);
+  min-height: 118px;
+  align-content: center;
 }
 
 .pomodoro-stat-value {
@@ -457,7 +502,7 @@
 }
 
 .pomodoro-stat-label {
-  font-size: 0.8rem;
+  font-size: var(--font-xs);
   color: var(--text-muted);
 }
 
@@ -472,7 +517,19 @@
   margin: 10px 0 0;
   padding-left: 18px;
   color: var(--text-muted);
-  font-size: 0.88rem;
+  font-size: var(--font-sm);
+}
+
+.pomodoro-progress-bar {
+  width: var(--progress-width);
+}
+
+.pomodoro-timer-card {
+  text-align: center;
+}
+
+.pomodoro-timer-display {
+  font-size: clamp(2rem, 7vw, 3.8rem);
 }
 
 .ai-page {

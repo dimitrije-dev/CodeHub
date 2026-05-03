@@ -145,11 +145,10 @@ export default function Snippets() {
         <div className="page-header">
           <h3>Library</h3>
           <input
-            className="input"
+            className="input search-input"
             placeholder="Search by title, language, or code"
             value={query}
             onChange={(event) => setQuery(event.target.value)}
-            style={{ maxWidth: '360px' }}
           />
         </div>
 
