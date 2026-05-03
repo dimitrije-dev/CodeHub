@@ -1,44 +1,41 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { register } from '../../services/auth.js'
-import { useAuth } from '../../hooks/useAuth.js'
+import logo from '../../assets/codehub-logo.png'
 
 export default function Register() {
   const [formData, setFormData] = useState({
     username: '',
     email: '',
     password: '',
-    confirmPassword: ''
+    confirmPassword: '',
   })
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
-  const { login: setAuth } = useAuth()
 
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    })
-    // Clear error when user starts typing
+  function handleChange(e) {
+    setFormData((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }))
+
     if (error) setError('')
   }
 
-  const handleSubmit = async (e) => {
+  async function handleSubmit(e) {
     e.preventDefault()
     setLoading(true)
     setError('')
 
-    // Validate passwords match
     if (formData.password !== formData.confirmPassword) {
-      setError('Passwords do not match')
+      setError('Lozinke se ne poklapaju')
       setLoading(false)
       return
     }
 
-    // Validate password length
     if (formData.password.length < 6) {
-      setError('Password must be at least 6 characters long')
+      setError('Lozinka mora imati najmanje 6 karaktera')
       setLoading(false)
       return
     }
@@ -46,8 +43,8 @@ export default function Register() {
     try {
       await register(formData.username, formData.email, formData.password)
       navigate('/login')
-    } catch (err) {
-      setError(err.message || 'Failed to create account')
+    } catch (error) {
+      setError(error.message || 'Neuspešna registracija')
     } finally {
       setLoading(false)
     }
@@ -56,30 +53,15 @@ export default function Register() {
   return (
     <div className="auth-container">
       <div className="auth-card">
-        <div style={{ textAlign: 'center', marginBottom: '32px' }}>
-          <div style={{ 
-            fontSize: '3rem', 
-            marginBottom: '16px',
-            background: 'linear-gradient(135deg, var(--color-brand-500), var(--color-purple-500))',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            backgroundClip: 'text'
-          }}>
-            🎯
-          </div>
-          <h1>Join CodeHub</h1>
-          <p style={{ 
-            color: 'var(--color-gray-600)', 
-            margin: '8px 0 0 0',
-            fontSize: '0.875rem'
-          }}>
-            Create your account to get started
-          </p>
+        <div className="auth-header">
+          <img className="brand-logo brand-logo--large" src={logo} alt="CodeHub logo" />
+          <h1 className="auth-title">Napravi CodeHub nalog</h1>
+          <p className="auth-subtitle">Organizuj zadatke, snippete i fokus sesije na jednom mestu.</p>
         </div>
-        
-        <form onSubmit={handleSubmit}>
+
+        <form onSubmit={handleSubmit} className="panel-grid">
           <div className="form-group">
-            <label htmlFor="username">Username</label>
+            <label htmlFor="username">Korisničko ime</label>
             <input
               type="text"
               id="username"
@@ -88,13 +70,13 @@ export default function Register() {
               onChange={handleChange}
               required
               className="input"
-              placeholder="Choose a username"
+              placeholder="dimitrije"
               autoComplete="username"
             />
           </div>
-          
+
           <div className="form-group">
-            <label htmlFor="email">Email Address</label>
+            <label htmlFor="email">Email adresa</label>
             <input
               type="email"
               id="email"
@@ -103,13 +85,13 @@ export default function Register() {
               onChange={handleChange}
               required
               className="input"
-              placeholder="Enter your email"
+              placeholder="ime@firma.com"
               autoComplete="email"
             />
           </div>
-          
+
           <div className="form-group">
-            <label htmlFor="password">Password</label>
+            <label htmlFor="password">Lozinka</label>
             <input
               type="password"
               id="password"
@@ -118,13 +100,13 @@ export default function Register() {
               onChange={handleChange}
               required
               className="input"
-              placeholder="Create a password"
+              placeholder="Minimum 6 karaktera"
               autoComplete="new-password"
             />
           </div>
-          
+
           <div className="form-group">
-            <label htmlFor="confirmPassword">Confirm Password</label>
+            <label htmlFor="confirmPassword">Potvrda lozinke</label>
             <input
               type="password"
               id="confirmPassword"
@@ -133,20 +115,20 @@ export default function Register() {
               onChange={handleChange}
               required
               className="input"
-              placeholder="Confirm your password"
+              placeholder="Ponovi lozinku"
               autoComplete="new-password"
             />
           </div>
-          
+
           {error && <div className="error-message">{error}</div>}
-          
+
           <button type="submit" className="btn btn-primary" disabled={loading}>
-            {loading ? 'Creating account...' : 'Create Account'}
+            {loading ? 'Kreiranje...' : 'Kreiraj nalog'}
           </button>
         </form>
-        
+
         <p className="auth-link">
-          Already have an account? <Link to="/login">Sign in here</Link>
+          Već imaš nalog? <Link to="/login">Prijavi se</Link>
         </p>
       </div>
     </div>

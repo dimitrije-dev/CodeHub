@@ -1,178 +1,217 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import SnippetCard from '../snippets/SnippetCard.jsx'
 import { api } from '../services/api.js'
 import { usePageTitle } from '../hooks/usePageTitle.js'
 
-export default function Snippets(){
-	console.log('SNIPPETS COMPONENT RENDERING!');
-	usePageTitle('Snippeti')
-	const [snippets, setSnippets] = useState([])
-	const [loading, setLoading] = useState(true)
-	const [error, setError] = useState('')
-	const [form, setForm] = useState({ title: '', language: 'javascript', code: '' })
-	const [editingId, setEditingId] = useState(null)
-	const [editForm, setEditForm] = useState({ title: '', language: 'javascript', code: '' })
+export default function Snippets() {
+  usePageTitle('Snippeti')
 
-	useEffect(() => {
-		let mounted = true
-		async function load(){
-			try {
-				const data = await api.get('/api/snippets')
-				if (mounted) setSnippets(data)
-			} catch(e){
-				setError(e.message)
-			} finally {
-				setLoading(false)
-			}
-		}
-		load()
-		return () => { mounted = false }
-	}, [])
+  const [snippets, setSnippets] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
+  const [query, setQuery] = useState('')
+  const [form, setForm] = useState({ title: '', language: 'javascript', code: '' })
+  const [editingId, setEditingId] = useState(null)
+  const [editForm, setEditForm] = useState({ title: '', language: 'javascript', code: '' })
 
-	async function handleAdd(e){
-		console.log('SNIPPET ADD FUNCTION CALLED!', { form });
-		e.preventDefault()
-		setError('')
-		try {
-			const payload = {
-				title: form.title,
-				language: form.language,
-				code: form.code
-			}
-			const created = await api.post('/api/snippets', payload)
-			setSnippets(s => [created, ...s])
-			setForm({ title: '', language: 'javascript', code: '' })
-		} catch(e){
-			setError(e.message)
-		}
-	}
+  useEffect(() => {
+    let mounted = true
 
-	function startEdit(s){
-		setEditingId(s.id)
-		setEditForm({ title: s.title, language: s.language, code: s.code })
-	}
+    async function loadSnippets() {
+      try {
+        const data = await api.get('/api/snippets')
+        if (mounted) setSnippets(data)
+      } catch (error) {
+        if (mounted) setError(error.message)
+      } finally {
+        if (mounted) setLoading(false)
+      }
+    }
 
-	async function saveEdit(e){
-		e.preventDefault()
-		try{
-			const payload = {
-				title: editForm.title,
-				language: editForm.language,
-				code: editForm.code
-			}
-			const updated = await api.put(`/api/snippets/${editingId}`, payload)
-			setSnippets(list => list.map(s => s.id===editingId ? updated : s))
-			setEditingId(null)
-		}catch(e){ setError(e.message) }
-	}
+    loadSnippets()
+    return () => {
+      mounted = false
+    }
+  }, [])
 
-	async function remove(id){
-		try{
-			await api.delete(`/api/snippets/${id}`)
-			setSnippets(list => list.filter(s => s.id !== id))
-		}catch(e){ setError(e.message) }
-	}
+  async function handleAdd(e) {
+    e.preventDefault()
+    setError('')
 
-	return (
-		<div style={{display:'grid', gap:24}}>
-			{/* Add Snippet Form */}
-			<div className="card">
-				<h3 style={{fontWeight:700, marginBottom:16}}>Dodaj novi snippet</h3>
-				<form onSubmit={handleAdd} style={{display:'grid', gap:12}}>
-					<input 
-						className="input"
-						placeholder="Naslov snippeta" 
-						value={form.title} 
-						onChange={e=>{
-							console.log('Snippet input changed:', e.target.value);
-							setForm(f=>({...f, title:e.target.value}));
-						}} 
-					/>
-					<select 
-						className="input"
-						value={form.language} 
-						onChange={e=>setForm(f=>({...f, language:e.target.value}))}
-					>
-						<option>javascript</option>
-						<option>typescript</option>
-						<option>python</option>
-						<option>java</option>
-						<option>csharp</option>
-						<option>html</option>
-						<option>css</option>
-						<option>sql</option>
-					</select>
-					<textarea 
-						className="textarea"
-						placeholder="Kod snippeta..." 
-						rows={8} 
-						value={form.code} 
-						onChange={e=>setForm(f=>({...f, code:e.target.value}))} 
-					/>
-					<button type="submit" className="btn btn-primary">Sačuvaj snippet</button>
-				</form>
-				{error && <div style={{color:'var(--color-danger-600)', marginTop:12}}>{error}</div>}
-			</div>
+    try {
+      const payload = {
+        title: form.title,
+        language: form.language,
+        code: form.code,
+      }
+      const created = await api.post('/api/snippets', payload)
+      setSnippets((previous) => [created, ...previous])
+      setForm({ title: '', language: 'javascript', code: '' })
+    } catch (error) {
+      setError(error.message)
+    }
+  }
 
-			{/* Snippets List */}
-			{loading ? (
-				<div className="card">Učitavanje snippeta...</div>
-			) : (
-				<div style={{display:'grid', gap:16}}>
-					{snippets.length === 0 ? (
-						<div className="card" style={{textAlign:'center', padding:'48px 24px'}}>
-							<h3 style={{margin:'0 0 8px 0', color:'var(--color-gray-600)'}}>Nema snippeta</h3>
-							<p style={{margin:0, color:'var(--color-gray-500)'}}>Dodaj svoj prvi snippet koristeći formu iznad</p>
-						</div>
-					) : (
-						snippets.map(s => (
-							<div key={s.id} className="snippet-card">
-								{editingId===s.id ? (
-									<div style={{padding:24}}>
-										<form onSubmit={saveEdit} style={{display:'grid', gap:12}}>
-											<input 
-												className="input"
-												value={editForm.title} 
-												onChange={e=>setEditForm(f=>({...f, title:e.target.value}))} 
-											/>
-											<select 
-												className="input"
-												value={editForm.language} 
-												onChange={e=>setEditForm(f=>({...f, language:e.target.value}))}
-											>
-												<option>javascript</option>
-												<option>typescript</option>
-												<option>python</option>
-												<option>java</option>
-												<option>csharp</option>
-												<option>html</option>
-												<option>css</option>
-												<option>sql</option>
-											</select>
-											<textarea 
-												className="textarea"
-												rows={8} 
-												value={editForm.code} 
-												onChange={e=>setEditForm(f=>({...f, code:e.target.value}))} 
-											/>
-											<div style={{display:'flex', gap:12}}>
-												<button type="submit" className="btn btn-primary">Sačuvaj</button>
-												<button type="button" className="btn btn-secondary" onClick={()=>setEditingId(null)}>Otkaži</button>
-											</div>
-										</form>
-									</div>
-								) : (
-									<SnippetCard 
-										snippet={s} 
-										onEdit={()=>startEdit(s)} 
-										onDelete={()=>remove(s.id)} 
-									/>
-								)}
-							</div>
-						))
-					)}
-				</div>
-			)}
-		</div>
-	)
+  function startEdit(snippet) {
+    setEditingId(snippet.id)
+    setEditForm({ title: snippet.title, language: snippet.language, code: snippet.code })
+  }
+
+  async function saveEdit(e) {
+    e.preventDefault()
+    try {
+      const payload = {
+        title: editForm.title,
+        language: editForm.language,
+        code: editForm.code,
+      }
+      const updated = await api.put(`/api/snippets/${editingId}`, payload)
+      setSnippets((list) => list.map((snippet) => (snippet.id === editingId ? updated : snippet)))
+      setEditingId(null)
+    } catch (error) {
+      setError(error.message)
+    }
+  }
+
+  async function removeSnippet(id) {
+    try {
+      await api.delete(`/api/snippets/${id}`)
+      setSnippets((list) => list.filter((snippet) => snippet.id !== id))
+    } catch (error) {
+      setError(error.message)
+    }
+  }
+
+  const filteredSnippets = useMemo(() => {
+    if (!query.trim()) return snippets
+
+    const needle = query.toLowerCase()
+    return snippets.filter((snippet) => {
+      const title = (snippet.title || '').toLowerCase()
+      const code = (snippet.code || '').toLowerCase()
+      const language = (snippet.language || '').toLowerCase()
+      return title.includes(needle) || code.includes(needle) || language.includes(needle)
+    })
+  }, [query, snippets])
+
+  return (
+    <div className="panel-grid">
+      <section className="card panel-grid">
+        <div className="page-header">
+          <div>
+            <h1 className="page-title">Snippeti</h1>
+            <p className="page-subtitle">Sačuvaj često korišćen kod i pronađi ga za nekoliko sekundi.</p>
+          </div>
+        </div>
+
+        <form onSubmit={handleAdd} className="snippet-form">
+          <input
+            className="input"
+            placeholder="Naslov snippeta"
+            value={form.title}
+            onChange={(event) => setForm((prev) => ({ ...prev, title: event.target.value }))}
+          />
+
+          <select
+            className="input"
+            value={form.language}
+            onChange={(event) => setForm((prev) => ({ ...prev, language: event.target.value }))}
+          >
+            <option>javascript</option>
+            <option>typescript</option>
+            <option>python</option>
+            <option>java</option>
+            <option>csharp</option>
+            <option>html</option>
+            <option>css</option>
+            <option>sql</option>
+          </select>
+
+          <textarea
+            className="textarea"
+            placeholder="Kod snippeta..."
+            rows={8}
+            value={form.code}
+            onChange={(event) => setForm((prev) => ({ ...prev, code: event.target.value }))}
+          />
+
+          <button type="submit" className="btn btn-primary">Sačuvaj snippet</button>
+        </form>
+
+        {error && <div className="error-message">{error}</div>}
+      </section>
+
+      <section className="card panel-grid">
+        <div className="page-header">
+          <h3>Biblioteka</h3>
+          <input
+            className="input"
+            placeholder="Pretraži po naslovu, jeziku ili kodu"
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+            style={{ maxWidth: '360px' }}
+          />
+        </div>
+
+        {loading ? (
+          <div>Učitavanje snippeta...</div>
+        ) : filteredSnippets.length === 0 ? (
+          <div className="empty-state">Nema snippeta za prikaz.</div>
+        ) : (
+          <div className="data-grid">
+            {filteredSnippets.map((snippet) => (
+              <div key={snippet.id}>
+                {editingId === snippet.id ? (
+                  <div className="snippet-card">
+                    <form onSubmit={saveEdit} className="snippet-form">
+                      <input
+                        className="input"
+                        value={editForm.title}
+                        onChange={(event) => setEditForm((prev) => ({ ...prev, title: event.target.value }))}
+                      />
+
+                      <select
+                        className="input"
+                        value={editForm.language}
+                        onChange={(event) => setEditForm((prev) => ({ ...prev, language: event.target.value }))}
+                      >
+                        <option>javascript</option>
+                        <option>typescript</option>
+                        <option>python</option>
+                        <option>java</option>
+                        <option>csharp</option>
+                        <option>html</option>
+                        <option>css</option>
+                        <option>sql</option>
+                      </select>
+
+                      <textarea
+                        className="textarea"
+                        rows={8}
+                        value={editForm.code}
+                        onChange={(event) => setEditForm((prev) => ({ ...prev, code: event.target.value }))}
+                      />
+
+                      <div className="inline-actions">
+                        <button type="submit" className="btn btn-primary">Sačuvaj</button>
+                        <button type="button" className="btn btn-secondary" onClick={() => setEditingId(null)}>
+                          Otkaži
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                ) : (
+                  <SnippetCard
+                    snippet={snippet}
+                    onEdit={() => startEdit(snippet)}
+                    onDelete={() => removeSnippet(snippet.id)}
+                  />
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+      </section>
+    </div>
+  )
 }

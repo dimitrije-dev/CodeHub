@@ -6,6 +6,9 @@
     "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
     "dev:client": "cd codehub-react && npm run dev",
     "dev:server": "cd server && npm run dev",
+    "db:up": "docker compose up -d",
+    "db:down": "docker compose down",
+    "db:setup": "cd server && npm run db:setup",
     "install:all": "npm install && cd codehub-react && npm install && cd ../server && npm install",
     "build": "cd codehub-react && npm run build",
     "start": "cd server && npm start"

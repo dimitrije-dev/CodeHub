@@ -1,17 +1,45 @@
 import { useSyncExternalStore } from 'react'
 
-
 const key = 'codehub_token'
 const listeners = new Set()
 
+function emitChange() {
+  listeners.forEach((listener) => listener())
+}
 
-function getSnapshot() { return !!localStorage.getItem(key) }
-function subscribe(cb) { listeners.add(cb); return () => listeners.delete(cb) }
+function getSnapshot() {
+  return !!localStorage.getItem(key)
+}
 
+function subscribe(callback) {
+  listeners.add(callback)
+
+  function onStorage(event) {
+    if (!event || event.key === key) callback()
+  }
+
+  window.addEventListener('storage', onStorage)
+
+  return () => {
+    listeners.delete(callback)
+    window.removeEventListener('storage', onStorage)
+  }
+}
 
 export function useAuth() {
-const isAuthed = useSyncExternalStore(subscribe, getSnapshot, getSnapshot)
-const login = (token = 'dev-token') => { localStorage.setItem(key, token); listeners.forEach(l => l()) }
-const logout = () => { localStorage.removeItem(key); listeners.forEach(l => l()) }
-return { isAuthed, login, logout }
+  const isAuthed = useSyncExternalStore(subscribe, getSnapshot, getSnapshot)
+
+  const login = (token) => {
+    if (!token) return
+    localStorage.setItem(key, token)
+    emitChange()
+  }
+
+  const logout = () => {
+    localStorage.removeItem(key)
+    localStorage.removeItem('codehub_user')
+    emitChange()
+  }
+
+  return { isAuthed, login, logout }
 }

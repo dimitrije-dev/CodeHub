@@ -1,331 +1,262 @@
-import { useState, useEffect, useRef, useCallback } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { api } from '../services/api.js'
 import { usePageTitle } from '../hooks/usePageTitle.js'
 
+const STORAGE_KEY = 'codehub_pomodoro_state_v2'
+const WORK_PRESETS = [15, 25, 50]
+const BREAK_PRESETS = [5, 10, 15]
+
+function safeMinutes(value, fallback) {
+  const parsed = Number(value)
+  if (!Number.isFinite(parsed) || parsed <= 0 || parsed > 180) return fallback
+  return Math.round(parsed)
+}
+
+function formatTime(seconds) {
+  const safe = Math.max(0, Number(seconds) || 0)
+  const mins = Math.floor(safe / 60)
+  const secs = safe % 60
+  return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`
+}
+
 export default function Pomodoro() {
-  usePageTitle('Pomodoro Timer')
-  
-  const [timeLeft, setTimeLeft] = useState(25 * 60) // 25 minutes in seconds
+  usePageTitle('Pomodoro')
+
+  const [workMinutes, setWorkMinutes] = useState(25)
+  const [breakMinutes, setBreakMinutes] = useState(5)
+  const [mode, setMode] = useState('focus')
+  const [timeLeft, setTimeLeft] = useState(25 * 60)
   const [isRunning, setIsRunning] = useState(false)
-  const [isBreak, setIsBreak] = useState(false)
   const [sessionCount, setSessionCount] = useState(0)
   const [totalMinutes, setTotalMinutes] = useState(0)
-  const [selectedDuration, setSelectedDuration] = useState(25)
-  const [breakDuration, setBreakDuration] = useState(5)
-  const [isActive, setIsActive] = useState(false)
-  const intervalRef = useRef(null)
-  const startTimeRef = useRef(null)
-  const accumulatedTimeRef = useRef(0)
+  const [error, setError] = useState('')
 
-  // Load saved state from localStorage
   useEffect(() => {
-    const savedState = localStorage.getItem('pomodoroState')
-    if (savedState) {
-      const state = JSON.parse(savedState)
-      setTimeLeft(state.timeLeft)
-      setIsRunning(state.isRunning)
-      setIsBreak(state.isBreak)
-      setSessionCount(state.sessionCount)
-      setTotalMinutes(state.totalMinutes)
-      setSelectedDuration(state.selectedDuration)
-      setBreakDuration(state.breakDuration)
-      setIsActive(state.isActive)
-      accumulatedTimeRef.current = state.accumulatedTime || 0
-      
-      if (state.isRunning && state.startTime) {
-        startTimeRef.current = new Date(state.startTime)
-        // Calculate elapsed time since last start
-        const elapsed = Math.floor((Date.now() - state.startTime) / 1000)
-        const newTimeLeft = Math.max(0, state.timeLeft - elapsed)
-        setTimeLeft(newTimeLeft)
-        
-        // If time is up, trigger session complete
-        if (newTimeLeft <= 0) {
-          handleSessionComplete()
-        }
+    const saved = localStorage.getItem(STORAGE_KEY)
+    if (!saved) return
+
+    try {
+      const parsed = JSON.parse(saved)
+      const nextWork = safeMinutes(parsed.workMinutes, 25)
+      const nextBreak = safeMinutes(parsed.breakMinutes, 5)
+      const nextMode = parsed.mode === 'break' ? 'break' : 'focus'
+      const baseTime = nextMode === 'focus' ? nextWork * 60 : nextBreak * 60
+      const savedTime = Number(parsed.timeLeft)
+      const hasSavedTime = Number.isFinite(savedTime) && savedTime >= 0
+
+      let restoredTime = hasSavedTime ? Math.min(savedTime, baseTime) : baseTime
+      let restoredRunning = Boolean(parsed.isRunning)
+
+      if (restoredRunning && Number.isFinite(parsed.lastTick)) {
+        const elapsed = Math.max(0, Math.floor((Date.now() - parsed.lastTick) / 1000))
+        restoredTime = Math.max(0, restoredTime - elapsed)
+        if (restoredTime === 0) restoredRunning = false
       }
+
+      setWorkMinutes(nextWork)
+      setBreakMinutes(nextBreak)
+      setMode(nextMode)
+      setTimeLeft(restoredTime)
+      setIsRunning(restoredRunning)
+      setSessionCount(Math.max(0, Number(parsed.sessionCount) || 0))
+      setTotalMinutes(Math.max(0, Number(parsed.totalMinutes) || 0))
+    } catch {
+      localStorage.removeItem(STORAGE_KEY)
     }
   }, [])
 
-  // Save state to localStorage
   useEffect(() => {
     const state = {
+      workMinutes,
+      breakMinutes,
+      mode,
       timeLeft,
       isRunning,
-      isBreak,
       sessionCount,
       totalMinutes,
-      selectedDuration,
-      breakDuration,
-      isActive,
-      accumulatedTime: accumulatedTimeRef.current,
-      startTime: startTimeRef.current?.getTime()
+      lastTick: Date.now(),
     }
-    localStorage.setItem('pomodoroState', JSON.stringify(state))
-  }, [timeLeft, isRunning, isBreak, sessionCount, totalMinutes, selectedDuration, breakDuration, isActive])
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state))
+  }, [workMinutes, breakMinutes, mode, timeLeft, isRunning, sessionCount, totalMinutes])
 
-  const handleSessionComplete = useCallback(async () => {    setIsRunning(false)
-    clearInterval(intervalRef.current)
-    
-    if (!isBreak) {
-      // Work session completed - save to backend
-      const minutes = selectedDuration      
+  const handleSessionComplete = useCallback(async () => {
+    if (mode === 'focus') {
       try {
-        const response = await api.post('/api/focus-sessions', {
-          minutes: minutes
-        })      } catch (e) {      }
-      
-      // Update local stats
-      setTotalMinutes(prev => prev + minutes)
-      setSessionCount(prev => prev + 1)
-      accumulatedTimeRef.current += minutes
-      
-      // Start break automatically      setIsBreak(true)
-      setTimeLeft(breakDuration * 60)
-      
-      // Auto-start break timer
-      setTimeout(() => {        setIsRunning(true)
-        startTimeRef.current = new Date()
-      }, 1000) // Small delay to ensure state is updated
-      
-    } else {
-      // Break completed, start new work session      setIsBreak(false)
-      setTimeLeft(selectedDuration * 60)
-      // Don't auto-start work session, let user decide
+        await api.post('/api/focus-sessions', { minutes: workMinutes })
+      } catch {
+        setError('Sesija je završena, ali čuvanje fokusa na server nije uspelo.')
+      }
+
+      setSessionCount((previous) => previous + 1)
+      setTotalMinutes((previous) => previous + workMinutes)
+      setMode('break')
+      setTimeLeft(breakMinutes * 60)
+      setIsRunning(true)
+      return
     }
-  }, [isBreak, selectedDuration, breakDuration])
+
+    setMode('focus')
+    setTimeLeft(workMinutes * 60)
+    setIsRunning(false)
+  }, [mode, workMinutes, breakMinutes])
 
   useEffect(() => {
-    if (isRunning && timeLeft > 0) {
-      intervalRef.current = setInterval(() => {
-        setTimeLeft(prev => {
-          if (prev <= 1) {
-            handleSessionComplete()
-            return 0
-          }
-          return prev - 1
-        })
-      }, 1000)
-    } else {
-      clearInterval(intervalRef.current)
+    if (!isRunning || timeLeft <= 0) return undefined
+
+    const timer = setInterval(() => {
+      setTimeLeft((previous) => Math.max(0, previous - 1))
+    }, 1000)
+
+    return () => clearInterval(timer)
+  }, [isRunning, timeLeft])
+
+  useEffect(() => {
+    if (timeLeft !== 0 || !isRunning) return
+
+    setIsRunning(false)
+    void handleSessionComplete()
+  }, [timeLeft, isRunning, handleSessionComplete])
+
+  const totalSeconds = (mode === 'focus' ? workMinutes : breakMinutes) * 60
+  const progress = useMemo(() => {
+    if (totalSeconds <= 0) return 0
+    return Math.min(100, Math.max(0, ((totalSeconds - timeLeft) / totalSeconds) * 100))
+  }, [timeLeft, totalSeconds])
+
+  function startTimer() {
+    if (timeLeft <= 0) return
+    setError('')
+    setIsRunning(true)
+  }
+
+  function pauseTimer() {
+    setIsRunning(false)
+  }
+
+  function resetTimer() {
+    setIsRunning(false)
+    setMode('focus')
+    setTimeLeft(workMinutes * 60)
+    setError('')
+  }
+
+  function chooseWorkMinutes(minutes) {
+    if (isRunning || mode !== 'focus') return
+    setWorkMinutes(minutes)
+    setTimeLeft(minutes * 60)
+  }
+
+  function chooseBreakMinutes(minutes) {
+    if (isRunning || mode !== 'break') {
+      setBreakMinutes(minutes)
+      return
     }
 
-    return () => clearInterval(intervalRef.current)
-  }, [isRunning, timeLeft, handleSessionComplete])
-
-  function startTimer() {    setIsRunning(true)
-    setIsActive(true)
-    startTimeRef.current = new Date()
+    setBreakMinutes(minutes)
+    setTimeLeft(minutes * 60)
   }
-
-  function pauseTimer() {    setIsRunning(false)
-    if (startTimeRef.current) {
-      const elapsed = Math.floor((Date.now() - startTimeRef.current.getTime()) / 1000)
-      accumulatedTimeRef.current += elapsed
-    }
-  }
-
-  function resetTimer() {    setIsRunning(false)
-    setIsActive(false)
-    setIsBreak(false)
-    setTimeLeft(selectedDuration * 60)
-    startTimeRef.current = null
-    accumulatedTimeRef.current = 0
-  }
-
-  function formatTime(seconds) {
-    const mins = Math.floor(seconds / 60)
-    const secs = seconds % 60
-    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`
-  }
-
-  const progress = isBreak 
-    ? ((breakDuration * 60 - timeLeft) / (breakDuration * 60)) * 100
-    : ((selectedDuration * 60 - timeLeft) / (selectedDuration * 60)) * 100
 
   return (
-    <div style={{ maxWidth: '800px', margin: '0 auto', padding: '20px' }}>
-      <div className="card" style={{ padding: '40px', textAlign: 'center' }}>
-        <h1 style={{ 
-          fontWeight: 700, 
-          marginBottom: '32px',
-          color: isBreak ? 'var(--color-green-600)' : 'var(--color-brand-600)',
-          fontSize: '2.5rem'
-        }}>
-          {isBreak ? '☕ Pauza' : '🍅 Pomodoro Timer'}
-        </h1>
-
-        {/* Timer Display */}
-        <div style={{ 
-          fontSize: '6rem', 
-          fontWeight: 800, 
-          marginBottom: '32px',
-          color: isBreak ? 'var(--color-green-600)' : 'var(--color-brand-600)',
-          fontFamily: 'monospace',
-          textShadow: '0 4px 8px rgba(0,0,0,0.1)'
-        }}>
-          {formatTime(timeLeft)}
-        </div>
-
-        {/* Progress Bar */}
-        <div style={{ 
-          width: '100%', 
-          height: '8px', 
-          backgroundColor: 'var(--color-gray-200)', 
-          borderRadius: '4px',
-          marginBottom: '32px',
-          overflow: 'hidden'
-        }}>
-          <div style={{
-            width: `${progress}%`,
-            height: '100%',
-            backgroundColor: isBreak ? 'var(--color-green-600)' : 'var(--color-brand-600)',
-            transition: 'width 1s ease',
-            borderRadius: '4px'
-          }} />
-        </div>
-
-        {/* Duration Settings */}
-        <div style={{ marginBottom: '32px' }}>
-          <h3 style={{ marginBottom: '16px', color: 'var(--color-gray-700)' }}>
-            Trajanje sesije
-          </h3>
-          <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
-            {[5, 10, 25].map(duration => (
-              <button
-                key={duration}
-                onClick={() => {
-                  if (!isRunning) {
-                    setSelectedDuration(duration)
-                    if (!isBreak) {
-                      setTimeLeft(duration * 60)
-                    }
-                  }
-                }}
-                className={`btn ${selectedDuration === duration ? 'btn-primary' : 'btn-outline'}`}
-                disabled={isRunning}
-                style={{ minWidth: '60px' }}
-              >
-                {duration}min
-              </button>
-            ))}
+    <div className="pomodoro-layout">
+      <section className="card hero-card panel-grid">
+        <div className="page-header">
+          <div>
+            <h1 className="page-title">Pomodoro fokus</h1>
+            <p className="page-subtitle">
+              Radi u jasnim intervalima i prati koliko fokusa si stvarno odradio.
+            </p>
           </div>
+          <span className={`tag ${mode === 'focus' ? 'tag-medium' : 'tag-low'}`}>
+            {mode === 'focus' ? 'Radna sesija' : 'Pauza'}
+          </span>
         </div>
 
-        {/* Break Duration Settings */}
-        <div style={{ marginBottom: '32px' }}>
-          <h3 style={{ marginBottom: '16px', color: 'var(--color-gray-700)' }}>
-            Trajanje pauze
-          </h3>
-          <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
-            {[5, 10, 15].map(duration => (
-              <button
-                key={duration}
-                onClick={() => {
-                  if (!isRunning) {
-                    setBreakDuration(duration)
-                    if (isBreak) {
-                      setTimeLeft(duration * 60)
-                    }
-                  }
-                }}
-                className={`btn ${breakDuration === duration ? 'btn-primary' : 'btn-outline'}`}
-                disabled={isRunning}
-                style={{ minWidth: '60px' }}
-              >
-                {duration}min
-              </button>
-            ))}
-          </div>
+        <div className="pomodoro-display">{formatTime(timeLeft)}</div>
+
+        <div className="pomodoro-progress" role="progressbar" aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(progress)}>
+          <div style={{ width: `${progress}%` }} />
         </div>
 
-        {/* Control Buttons */}
-        <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', marginBottom: '32px', flexWrap: 'wrap' }}>
+        <div className="inline-actions" style={{ justifyContent: 'center' }}>
           {!isRunning ? (
-            <button onClick={startTimer} className="btn btn-primary" style={{ fontSize: '1.2rem', padding: '12px 24px' }}>
-              ▶️ Start
+            <button type="button" className="btn btn-primary" onClick={startTimer}>
+              Pokreni
             </button>
           ) : (
-            <button onClick={pauseTimer} className="btn btn-secondary" style={{ fontSize: '1.2rem', padding: '12px 24px' }}>
-              ⏸️ Pause
+            <button type="button" className="btn btn-secondary" onClick={pauseTimer}>
+              Pauziraj
             </button>
           )}
-          <button onClick={resetTimer} className="btn btn-outline" style={{ fontSize: '1.2rem', padding: '12px 24px' }}>
-            🔄 Reset
+          <button type="button" className="btn btn-outline" onClick={resetTimer}>
+            Resetuj
           </button>
         </div>
 
-        {/* Stats */}
-        <div style={{ 
-          display: 'grid', 
-          gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', 
-          gap: '20px',
-          marginTop: '32px'
-        }}>
-          <div style={{ 
-            padding: '20px', 
-            backgroundColor: 'var(--color-gray-50)', 
-            borderRadius: '12px',
-            border: '1px solid var(--color-gray-200)'
-          }}>
-            <div style={{ fontSize: '2rem', fontWeight: 'bold', color: 'var(--color-brand-600)' }}>
-              {sessionCount}
-            </div>
-            <div style={{ color: 'var(--color-gray-600)', fontSize: '0.9rem' }}>
-              Završene sesije
-            </div>
-          </div>
-          
-          <div style={{ 
-            padding: '20px', 
-            backgroundColor: 'var(--color-gray-50)', 
-            borderRadius: '12px',
-            border: '1px solid var(--color-gray-200)'
-          }}>
-            <div style={{ fontSize: '2rem', fontWeight: 'bold', color: 'var(--color-green-600)' }}>
-              {totalMinutes}
-            </div>
-            <div style={{ color: 'var(--color-gray-600)', fontSize: '0.9rem' }}>
-              Ukupno minuta
-            </div>
-          </div>
-          
-          <div style={{ 
-            padding: '20px', 
-            backgroundColor: 'var(--color-gray-50)', 
-            borderRadius: '12px',
-            border: '1px solid var(--color-gray-200)'
-          }}>
-            <div style={{ fontSize: '2rem', fontWeight: 'bold', color: 'var(--color-orange-600)' }}>
-              {isActive ? '🟢' : '🔴'}
-            </div>
-            <div style={{ color: 'var(--color-gray-600)', fontSize: '0.9rem' }}>
-              Status
-            </div>
+        {error && <div className="error-message">{error}</div>}
+      </section>
+
+      <section className="card pomodoro-settings">
+        <div className="panel-grid">
+          <h3>Dužina rada</h3>
+          <div className="pomodoro-row">
+            {WORK_PRESETS.map((minutes) => (
+              <button
+                key={minutes}
+                type="button"
+                onClick={() => chooseWorkMinutes(minutes)}
+                className={`btn ${workMinutes === minutes ? 'btn-primary' : 'btn-outline'}`}
+                disabled={isRunning || mode !== 'focus'}
+              >
+                {minutes} min
+              </button>
+            ))}
           </div>
         </div>
 
-        {/* Instructions */}
-        <div style={{ 
-          marginTop: '32px', 
-          padding: '20px', 
-          backgroundColor: 'var(--color-gray-50)', 
-          borderRadius: '12px',
-          border: '1px solid var(--color-gray-200)'
-        }}>
-          <h3 style={{ marginBottom: '12px', color: 'var(--color-gray-800)' }}>
-            📋 Kako koristiti Pomodoro Timer
-          </h3>
-          <ul style={{ textAlign: 'left', color: 'var(--color-gray-700)', lineHeight: '1.6' }}>
-            <li>Izaberi trajanje radne sesije (5, 10 ili 25 minuta)</li>
-            <li>Izaberi trajanje pauze (5, 10 ili 15 minuta)</li>
-            <li>Klikni "Start" da počneš radnu sesiju</li>
-            <li>Kada se sesija završi, automatski počinje pauza (zelena boja)</li>
-            <li>Timer se čuva čak i kada menjaš stranice</li>
-            <li>Svi minuti se automatski šalju na backend</li>
-          </ul>
+        <div className="panel-grid">
+          <h3>Dužina pauze</h3>
+          <div className="pomodoro-row">
+            {BREAK_PRESETS.map((minutes) => (
+              <button
+                key={minutes}
+                type="button"
+                onClick={() => chooseBreakMinutes(minutes)}
+                className={`btn ${breakMinutes === minutes ? 'btn-primary' : 'btn-outline'}`}
+                disabled={isRunning && mode === 'break'}
+              >
+                {minutes} min
+              </button>
+            ))}
+          </div>
         </div>
-      </div>
+      </section>
+
+      <section className="pomodoro-stats">
+        <article className="pomodoro-stat card">
+          <div className="pomodoro-stat-value">{sessionCount}</div>
+          <div className="pomodoro-stat-label">Završene sesije</div>
+        </article>
+
+        <article className="pomodoro-stat card">
+          <div className="pomodoro-stat-value">{totalMinutes}</div>
+          <div className="pomodoro-stat-label">Ukupno fokus minuta</div>
+        </article>
+
+        <article className="pomodoro-stat card">
+          <div className="pomodoro-stat-value">{isRunning ? 'Aktivan' : 'Spreman'}</div>
+          <div className="pomodoro-stat-label">Status timera</div>
+        </article>
+      </section>
+
+      <section className="card pomodoro-guide">
+        <h3>Kako da koristiš ovaj režim</h3>
+        <ul>
+          <li>Izaberi trajanje rada i pauze pre pokretanja sesije.</li>
+          <li>Tokom rada drži fokus na jednom zadatku bez prebacivanja.</li>
+          <li>Kada sesija istekne, pauza počinje automatski.</li>
+          <li>Po završetku pauze timer staje i čeka tvoj novi start.</li>
+        </ul>
+      </section>
     </div>
   )
 }

@@ -1,194 +1,130 @@
-# CodeHub - Full Stack Developer Productivity App
+<p align="center">
+  <img src="docs/assets/codehub-banner.png" alt="CodeHub Banner" width="100%" />
+</p>
 
-![CodeHub Dashboard](https://img.shields.io/badge/Status-Live-brightgreen)
-![React](https://img.shields.io/badge/React-18.2.0-blue)
-![Node.js](https://img.shields.io/badge/Node.js-20.11.0-green)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-14.0-blue)
+<h1 align="center">CodeHub 2.0</h1>
+<p align="center"><strong>Organize projects, track momentum, and ship faster with focus.</strong></p>
 
-## Overview
+<p align="center">
+  <img src="https://img.shields.io/badge/Version-2.0-1677ff?style=for-the-badge" alt="Version 2.0" />
+  <img src="https://img.shields.io/badge/Status-Active%20Development-0ea5e9?style=for-the-badge" alt="Status" />
+  <img src="https://img.shields.io/badge/Frontend-React%2019-61dafb?style=for-the-badge&logo=react&logoColor=0b1220" alt="React" />
+  <img src="https://img.shields.io/badge/Backend-Node.js%20%2B%20Express-1f2937?style=for-the-badge&logo=express&logoColor=white" alt="Node and Express" />
+  <img src="https://img.shields.io/badge/Database-PostgreSQL-336791?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL" />
+  <img src="https://img.shields.io/badge/Auth-JWT-111827?style=for-the-badge&logo=jsonwebtokens&logoColor=white" alt="JWT" />
+  <img src="https://img.shields.io/badge/Tooling-Vite%20%2B%20Docker-0f172a?style=for-the-badge&logo=vite&logoColor=ffd62e" alt="Vite and Docker" />
+</p>
 
-CodeHub is a modern full-stack application designed to boost developer productivity. It combines task management, code snippet storage, Pomodoro timer, and an achievement system into one comprehensive platform.
+## What Is CodeHub?
+CodeHub is a developer productivity workspace built to keep execution clear and fast.
+It combines task management, snippet organization, Pomodoro focus sessions, and achievement-driven motivation into one smooth flow.
 
-## Features
+You can plan your day, stay in focus blocks, track momentum, and keep reusable code close, without juggling multiple tools.
 
-### Task Management
-- Create and manage tasks with priorities (low, medium, high)
-- Status tracking (To-Do, Doing, Done)
-- Due date management with calendar view
-- Filtering and search by status and priority
-- Real-time updates with drag and drop functionality
+## Why CodeHub 2.0 Is Better
+CodeHub 2.0 is a major polish and stability release focused on real daily usage.
 
-### Code Snippets
-- Syntax highlighting for 8+ programming languages
-- Organization by categories (JavaScript, TypeScript, Python, Java, C#, HTML, CSS, SQL)
-- Quick search and filtering
-- Copy-to-clipboard functionality
-- Version control for snippets
+- Upgraded dashboard experience with cleaner hierarchy and better visual clarity.
+- Modernized pages across login, tasks, snippets, focus, achievements, and profile.
+- Improved UX consistency with a unified design system, spacing, and responsive behavior.
+- Better runtime stability with lint-clean frontend and production build validation.
+- Faster loading strategy via route-level lazy loading and optimized snippet highlighting bundle.
+- Cleaner auth behavior and more predictable state handling for login/logout flows.
 
-### Pomodoro Timer
-- Customizable timer (25min work, 5min break)
-- Session tracking with statistics
-- Focus time analytics with charts
-- Break reminders with notifications
-- Productivity insights
+In short: fewer rough edges, clearer flow, and a product that feels ready for serious iteration.
 
-### Achievement System
-- 12 unique achievements for motivation
-- Progress tracking with percentages
-- Real-time unlock notifications
-- Gamification elements for engagement
+## Core Experience
+- **Dashboard Command Center**: quick overview of work, focus, progress, and momentum.
+- **Task Flow**: create, prioritize, filter, and complete work with less friction.
+- **Snippet Library**: save and retrieve high-value code instantly.
+- **Focus Engine**: Pomodoro cycles with tracked focus minutes.
+- **Achievement Layer**: visible progress markers that encourage consistency.
 
-### Analytics Dashboard
-- Focus time charts (7-day view)
-- Task completion velocity
-- Productivity metrics
-- Personal statistics
-- Interactive calendar
+## Architecture At A Glance
+CodeHub follows a clean full-stack structure with a React client, Express API, and PostgreSQL persistence.
 
-## Technologies
-
-### Frontend
-- React 18.2.0 - Modern UI library
-- Vite - Fast build tool
-- React Router - Client-side routing
-- Recharts - Data visualization
-- React Syntax Highlighter - Code display
-- CSS3 - Custom styling system
-
-### Backend
-- Node.js 20.11.0 - Runtime environment
-- Express.js - Web framework
-- PostgreSQL 14 - Relational database
-- JWT - Authentication
-- bcryptjs - Password hashing
-- CORS - Cross-origin requests
-
-## Quick Start
-
-### 1. Installation
-```bash
-npm install
+```mermaid
+flowchart LR
+  A[React 19 + Vite Frontend] --> B[Express API Layer]
+  B --> C[(PostgreSQL)]
+  B --> D[JWT Auth Service]
+  B --> E[Productivity Services\nTasks, Snippets, Focus, Achievements]
 ```
 
-### 2. Running
+### Project Layout
+```text
+codehub-fullstack-main/
+├── codehub-react/      # Frontend app (React + Vite)
+├── server/             # Backend API (Express + PostgreSQL)
+├── docs/assets/        # README visual assets
+├── docker-compose.yml  # Local PostgreSQL container
+└── package.json        # Root scripts (dev, db, build)
+```
+
+## Getting Started
+### 1. Install dependencies
+```bash
+npm run install:all
+```
+
+### 2. Start PostgreSQL
+```bash
+npm run db:up
+```
+
+### 3. Initialize schema and demo data
+```bash
+npm run db:setup
+```
+
+### 4. Run frontend + backend
 ```bash
 npm run dev
 ```
 
-Application will be available at:
-- Frontend: http://localhost:5173
-- Backend: http://localhost:3001
+### Local URLs
+- Frontend: `http://localhost:5173`
+- Backend: `http://localhost:3001`
 
-### 3. Database Setup
+## Demo Access
+- Username: `demo`
+- Email: `demo@example.com`
+- Password: `demo123`
+
+## Environment Setup
+Create local environment files from the examples:
+
+- Root example: `.env.example`
+- Server example: `server/.env.example`
+
+Recommended first step:
 ```bash
-cd server
-node scripts/setup-db.js
+cp .env.example .env
+cp server/.env.example server/.env
 ```
 
-## Usage
+## Mini Roadmap To Full Release
+### Phase 1: Product Hardening
+- Finalize profile update and password-change backend endpoints.
+- Add end-to-end validation on task, snippet, and focus flows.
+- Add release-ready error states and empty-state UX copy.
 
-1. Registration - Create a new account
-2. Login - Sign in to your account
-3. Dashboard - View productivity metrics
-4. Tasks - Manage your tasks
-5. Snippets - Save code snippets
-6. Pomodoro - Focus on work sessions
+### Phase 2: Team-Ready Productivity
+- Add project/workspace grouping and multi-board task views.
+- Add collaboration-ready task metadata (owners, labels, deadlines).
+- Add richer analytics with trends and weekly performance snapshots.
 
-## Screenshots
+### Phase 3: Scale and Platform
+- Introduce notifications and reminder automation.
+- Add export/import workflows for productivity history.
+- Prepare deployment templates and production observability layer.
 
-### Dashboard
-- Interactive focus time chart
-- Task statistics
-- Achievement system
-- Calendar view
+## Contributing
+Contributions are welcome.
+Open an issue for ideas, improvements, or bug reports, then follow up with a focused pull request.
 
-### Task Management
-- Drag and drop interface
-- Priority system
-- Status tracking
-- Due date management
-
-### Code Snippets
-- Syntax highlighting
-- Language categorization
-- Search functionality
-- Edit/Delete options
-
-## Development
-
-### Project Structure
-```
-codehub-fullstack/
-├── server/                 # Backend API
-│   ├── controllers/        # Route handlers
-│   ├── services/          # Business logic
-│   ├── routes/            # API routes
-│   ├── middleware/        # Auth & validation
-│   └── scripts/           # Database setup
-├── codehub-react/         # Frontend React app
-│   ├── src/
-│   │   ├── components/    # Reusable components
-│   │   ├── pages/         # Page components
-│   │   ├── hooks/         # Custom hooks
-│   │   ├── services/      # API calls
-│   │   └── styles/        # CSS files
-│   └── public/            # Static assets
-└── package.json           # Root dependencies
-```
-
-### Scripts
-```bash
-npm run dev          # Run both servers
-npm run dev:server   # Backend only
-npm run dev:client   # Frontend only
-npm run build        # Production build
-```
-
-## Database Schema
-
-### Users
-- id, username, email, password_hash, created_at
-
-### Tasks
-- id, user_id, title, description, priority, status, due_date, created_at, updated_at
-
-### Snippets
-- id, user_id, title, language, code, created_at, updated_at
-
-### Focus Sessions
-- id, user_id, duration_minutes, created_at
-
-## Deployment
-
-### Production Build
-```bash
-# Frontend
-cd codehub-react
-npm run build
-
-# Backend
-cd ../server
-npm start
-```
-
-### Environment Variables
-```env
-NODE_ENV=production
-DATABASE_URL=postgresql://user:password@host:port/database
-JWT_SECRET=your-production-secret
-PORT=3001
-```
-
-
-## License
-
-MIT License - see LICENSE file for details
-
-## Author
-
-**Dimitrije Milenkovic**
-- GitHub: [@dimitrijemilenkovic](https://github.com/dimitrijemilenkovic)
-
----
-
-If you like this project, please give it a star!
+## Final Note
+<p align="center">
+  <img src="docs/assets/codehub-logo.png" alt="CodeHub Logo" width="120" />
+</p>
+<p align="center"><strong>CodeHub 2.0 is built for momentum. Keep building.</strong></p>

@@ -6,7 +6,9 @@ const pageTitles = {
   '/dashboard': 'Dashboard',
   '/tasks': 'Taskovi',
   '/snippets': 'Snippeti',
-  '/profile': 'Profil'
+  '/profile': 'Profil',
+  '/achievements': 'Achievements',
+  '/pomodoro': 'Pomodoro'
 }
 
 export default function Topbar() {
@@ -23,9 +25,10 @@ export default function Topbar() {
 
   return (
     <header className="topbar">
-      <h1 className="topbar-title">
-        {currentPage}
-      </h1>
+      <div className="topbar-title-group">
+        <h1 className="topbar-title">{currentPage}</h1>
+        <div className="topbar-subtitle">Planiraj, fokusiraj se i završi bez stresa.</div>
+      </div>
       <div className="topbar-actions">
         <ThemeToggle />
         {isAuthed && (
