@@ -54,7 +54,7 @@ export default function Register() {
     <div className="auth-container">
       <div className="auth-card">
         <div className="auth-header">
-          <img className="brand-logo brand-logo--large" src={logo} alt="CodeHub logo" />
+          <img className="brand-logo brand-logo--xlarge" src={logo} alt="CodeHub logo" />
           <h1 className="auth-title">Napravi CodeHub nalog</h1>
           <p className="auth-subtitle">Organizuj zadatke, snippete i fokus sesije na jednom mestu.</p>
         </div>

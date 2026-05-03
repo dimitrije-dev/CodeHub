@@ -11,12 +11,22 @@ const pageTitles = {
   '/pomodoro': 'Pomodoro'
 }
 
+const pageStatus = {
+  '/dashboard': 'Overview',
+  '/tasks': 'Execution',
+  '/snippets': 'Knowledge',
+  '/profile': 'Profile',
+  '/achievements': 'Progress',
+  '/pomodoro': 'Focus Mode'
+}
+
 export default function Topbar() {
   const { isAuthed, logout } = useAuth();
   const nav = useNavigate();
   const location = useLocation();
 
   const currentPage = pageTitles[location.pathname] || 'CodeHub';
+  const currentStatus = pageStatus[location.pathname] || 'Workspace';
 
   function onLogout() {
     logout();
@@ -26,10 +36,12 @@ export default function Topbar() {
   return (
     <header className="topbar">
       <div className="topbar-title-group">
+        <div className="topbar-kicker">CodeHub Workspace / {currentPage}</div>
         <h1 className="topbar-title">{currentPage}</h1>
         <div className="topbar-subtitle">Planiraj, fokusiraj se i završi bez stresa.</div>
       </div>
       <div className="topbar-actions">
+        <span className="status-pill">{currentStatus}</span>
         <ThemeToggle />
         {isAuthed && (
           <button className="btn btn-outline" onClick={onLogout}>

@@ -84,10 +84,14 @@ export default function Sidebar({ isCollapsed, onToggle }) {
     <aside className={`sidebar ${isCollapsed ? 'sidebar-collapsed' : ''}`}>
       <div className="sidebar-header">
         <div className="brand">
-          <img className="brand-logo" src={logo} alt="CodeHub logo" />
+          <img
+            className={`brand-logo ${isCollapsed ? 'brand-logo--collapsed' : 'brand-logo--sidebar'}`}
+            src={logo}
+            alt="CodeHub logo"
+          />
           <div className="brand-copy">
             <div className="brand-title">CodeHub</div>
-            <div className="brand-subtitle">Focus Workspace</div>
+            <div className="brand-subtitle">Build Momentum Daily</div>
           </div>
         </div>
         <button

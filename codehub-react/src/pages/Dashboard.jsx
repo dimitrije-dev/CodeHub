@@ -6,6 +6,7 @@ import QuickActions from '../components/QuickActions.jsx'
 import Achievements from '../components/Achievements.jsx'
 import { api } from '../services/api.js'
 import { usePageTitle } from '../hooks/usePageTitle.js'
+import logo from '../assets/codehub-logo.png'
 
 function MiniCalendar() {
   const now = new Date()
@@ -133,78 +134,98 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="panel-grid">
-      <section className="card hero-card dashboard-hero">
-        <div className="dashboard-hero-top">
-          <div>
+    <div className="panel-grid dashboard-motion">
+      <section className="card hero-card dashboard-hero motion-card">
+        <div className="dashboard-hero-layout">
+          <div className="dashboard-hero-top">
             <h1 className="dashboard-hero-title">Dobrodošao nazad</h1>
             <p className="dashboard-hero-text">Centralni pregled rada, fokusa i napretka za ovu nedelju.</p>
+
+            <div className="dashboard-cta-row">
+              <button className="btn btn-outline" onClick={() => navigate('/pomodoro')}>
+                Otvori pomodoro
+              </button>
+              <button className="btn btn-primary" onClick={() => navigate('/tasks')}>
+                Novi task
+              </button>
+            </div>
           </div>
 
-          <div className="inline-actions">
-            <button className="btn btn-outline" onClick={() => navigate('/pomodoro')}>
-              Otvori pomodoro
-            </button>
-            <button className="btn btn-primary" onClick={() => navigate('/tasks')}>
-              Novi task
-            </button>
+          <div className="dashboard-brand-block">
+            <img src={logo} alt="CodeHub logo" className="dashboard-brand-logo" />
+            <div className="dashboard-brand-copy">
+              <div className="dashboard-brand-title">CodeHub</div>
+              <div className="dashboard-brand-subtitle">Daily execution, visible progress, cleaner delivery.</div>
+            </div>
           </div>
         </div>
-
-        <QuickActions onTaskAdded={handleTaskAdded} />
       </section>
 
-      <section className="stat-grid">
-        <button className="stat-tile" onClick={() => navigate('/tasks', { state: { filter: 'todo' } })}>
+      <section className="stat-grid motion-grid">
+        <button className="stat-tile motion-card" onClick={() => navigate('/tasks', { state: { filter: 'todo' } })}>
           <div className="stat-label">To-Do</div>
           <div className="stat-value metric-orange">{taskCounts.todo}</div>
         </button>
-        <button className="stat-tile" onClick={() => navigate('/tasks', { state: { filter: 'doing' } })}>
+        <button className="stat-tile motion-card" onClick={() => navigate('/tasks', { state: { filter: 'doing' } })}>
           <div className="stat-label">U radu</div>
           <div className="stat-value metric-blue">{taskCounts.doing}</div>
         </button>
-        <button className="stat-tile" onClick={() => navigate('/tasks', { state: { filter: 'done' } })}>
+        <button className="stat-tile motion-card" onClick={() => navigate('/tasks', { state: { filter: 'done' } })}>
           <div className="stat-label">Završeno</div>
           <div className="stat-value metric-green">{taskCounts.done}</div>
         </button>
-        <div className="stat-tile">
+        <div className="stat-tile motion-card">
           <div className="stat-label">Snippeti</div>
           <div className="stat-value">{stats.totalSnippets}</div>
         </div>
       </section>
 
-      <section className="dashboard-grid">
-        <div className="task-summary card">
-          <h3>Nedeljni sažetak</h3>
-          <div className="task-summary-card">
-            <div className="task-summary-item">
-              <span className="task-summary-label">Ukupno taskova</span>
-              <span className="task-summary-value">{stats.totalTasks}</span>
-            </div>
-            <div className="task-summary-item">
-              <span className="task-summary-label">Završenih taskova</span>
-              <span className="task-summary-value metric-green">{stats.completedTasks}</span>
-            </div>
-            <div className="task-summary-item">
-              <span className="task-summary-label">Fokus minuta (7 dana)</span>
-              <span className="task-summary-value metric-blue">{stats.focusMinutes}</span>
-            </div>
-            <div className="task-summary-item">
-              <span className="task-summary-label">Aktivni streak</span>
-              <span className="task-summary-value metric-orange">{stats.currentStreak} dana</span>
-            </div>
-          </div>
+      <section className="dashboard-content-grid motion-card">
+        <div className="dashboard-left-stack">
+          <section className="chart-grid">
+            <VelocityChart
+              data={velocity}
+              loading={loading}
+              onOpenTasks={() => navigate('/tasks')}
+            />
+            <ProgressChart
+              data={focus}
+              loading={loading}
+              onStartFocus={() => navigate('/pomodoro')}
+            />
+          </section>
         </div>
 
-        <MiniCalendar />
+        <div className="dashboard-right-stack">
+          <QuickActions onTaskAdded={handleTaskAdded} />
+
+          <div className="task-summary card">
+            <h3>Nedeljni sažetak</h3>
+            <div className="task-summary-card">
+              <div className="task-summary-item">
+                <span className="task-summary-label">Ukupno taskova</span>
+                <span className="task-summary-value">{stats.totalTasks}</span>
+              </div>
+              <div className="task-summary-item">
+                <span className="task-summary-label">Završenih taskova</span>
+                <span className="task-summary-value metric-green">{stats.completedTasks}</span>
+              </div>
+              <div className="task-summary-item">
+                <span className="task-summary-label">Fokus minuta (7 dana)</span>
+                <span className="task-summary-value metric-blue">{stats.focusMinutes}</span>
+              </div>
+              <div className="task-summary-item">
+                <span className="task-summary-label">Aktivni streak</span>
+                <span className="task-summary-value metric-orange">{stats.currentStreak} dana</span>
+              </div>
+            </div>
+          </div>
+
+          <MiniCalendar />
+        </div>
       </section>
 
-      <section className="chart-grid">
-        <VelocityChart data={velocity} loading={loading} />
-        <ProgressChart data={focus} loading={loading} />
-      </section>
-
-      <section className="card panel-grid" style={{ background: 'linear-gradient(135deg, var(--surface-soft), var(--surface))' }}>
+      <section className="card panel-grid achievements-shell motion-card">
         <h2>Achievements</h2>
         <Achievements stats={stats} />
       </section>

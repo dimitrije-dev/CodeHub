@@ -43,9 +43,15 @@ export default function Login() {
     <div className="auth-container">
       <div className="auth-card">
         <div className="auth-header">
-          <img className="brand-logo brand-logo--large" src={logo} alt="CodeHub logo" />
+          <img className="brand-logo brand-logo--xlarge" src={logo} alt="CodeHub logo" />
           <h1 className="auth-title">Dobrodošao nazad</h1>
           <p className="auth-subtitle">Prijavi se i nastavi gde si stao.</p>
+        </div>
+
+        <div className="auth-brand-highlight">
+          <div className="auth-brand-item">Jasan pregled rada i fokusa na jednom mestu</div>
+          <div className="auth-brand-item">Brže izvršavanje taskova bez prebacivanja alata</div>
+          <div className="auth-brand-item">Pouzdan ritam rada kroz pomodoro i metrike</div>
         </div>
 
         <form onSubmit={handleSubmit} className="panel-grid">
