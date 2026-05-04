@@ -55,5 +55,8 @@ ALTER TABLE focus_sessions ADD COLUMN IF NOT EXISTS user_id UUID REFERENCES user
 
 CREATE INDEX IF NOT EXISTS idx_snippets_user_id ON snippets(user_id);
 CREATE INDEX IF NOT EXISTS idx_tasks_user_id ON tasks(user_id);
+CREATE INDEX IF NOT EXISTS idx_tasks_user_status ON tasks(user_id, status);
+CREATE INDEX IF NOT EXISTS idx_tasks_user_created_at ON tasks(user_id, created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_focus_sessions_user_id ON focus_sessions(user_id);
+CREATE INDEX IF NOT EXISTS idx_focus_sessions_user_created_at ON focus_sessions(user_id, created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_achievements_user_id ON achievements(user_id);

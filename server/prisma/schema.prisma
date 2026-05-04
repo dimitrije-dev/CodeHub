@@ -1,0 +1,77 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  username     String         @unique @db.VarChar(50)
+  email        String         @unique @db.VarChar(100)
+  passwordHash String         @map("password_hash") @db.VarChar(255)
+  createdAt    DateTime       @default(now()) @map("created_at") @db.Timestamp(6)
+  snippets     Snippet[]
+  tasks        Task[]
+  focusSessions FocusSession[]
+  achievements Achievement[]
+
+  @@map("users")
+}
+
+model Snippet {
+  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title       String    @db.VarChar(255)
+  code        String
+  language    String    @db.VarChar(50)
+  description String?
+  tags        String[]  @default([])
+  userId      String?   @map("user_id") @db.Uuid
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt   DateTime  @default(now()) @map("updated_at") @db.Timestamp(6)
+  user        User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId], map: "idx_snippets_user_id")
+  @@map("snippets")
+}
+
+model Task {
+  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title       String    @db.VarChar(255)
+  description String?
+  status      String    @default("todo") @db.VarChar(20)
+  priority    String    @default("medium") @db.VarChar(20)
+  dueDate     DateTime? @map("due_date") @db.Date
+  userId      String?   @map("user_id") @db.Uuid
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt   DateTime  @default(now()) @map("updated_at") @db.Timestamp(6)
+  user        User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId], map: "idx_tasks_user_id")
+  @@map("tasks")
+}
+
+model FocusSession {
+  id              String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  durationMinutes Int       @map("duration_minutes")
+  userId          String?   @map("user_id") @db.Uuid
+  createdAt       DateTime  @default(now()) @map("created_at") @db.Timestamp(6)
+  user            User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId], map: "idx_focus_sessions_user_id")
+  @@map("focus_sessions")
+}
+
+model Achievement {
+  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId        String?  @map("user_id") @db.Uuid
+  achievementId String   @map("achievement_id") @db.VarChar(50)
+  unlockedAt    DateTime @default(now()) @map("unlocked_at") @db.Timestamp(6)
+  user          User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, achievementId])
+  @@index([userId], map: "idx_achievements_user_id")
+  @@map("achievements")
+}

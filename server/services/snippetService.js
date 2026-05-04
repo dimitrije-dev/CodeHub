@@ -1,4 +1,5 @@
 import { pool } from '../config/database.js'
+import { notFound } from '../utils/errors.js'
 
 export class SnippetService {
   static async getAll(userId, search = null) {
@@ -30,13 +31,13 @@ export class SnippetService {
        RETURNING *`,
       [id, userId, title, code, language, tags]
     )
-    if (result.rowCount === 0) throw new Error('Not found')
+    if (result.rowCount === 0) throw notFound('Snippet not found')
     return result.rows[0]
   }
 
   static async delete(userId, id) {
     const result = await pool.query('DELETE FROM snippets WHERE id=$1 AND user_id=$2', [id, userId])
-    if (result.rowCount === 0) throw new Error('Not found')
+    if (result.rowCount === 0) throw notFound('Snippet not found')
     return true
   }
 }

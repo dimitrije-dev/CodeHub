@@ -17,5 +17,55 @@ services:
       timeout: 5s
       retries: 10
 
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: codehub-server
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      NODE_ENV: development
+      PORT: 3001
+      PGHOST: postgres
+      PGPORT: 5432
+      PGUSER: codehub
+      PGPASSWORD: codehub_pass
+      PGDATABASE: codehub_db
+      DATABASE_URL: postgresql://codehub:codehub_pass@postgres:5432/codehub_db
+      JWT_SECRET: dev-secret
+      CORS_ORIGIN: http://localhost:${FRONTEND_PORT:-5173}
+    working_dir: /app
+    command: >
+      sh -c "until npm run db:setup; do echo 'Waiting for database...'; sleep 2; done &&
+             npm run prisma:generate &&
+             npm run dev"
+    ports:
+      - "${BACKEND_PORT:-3001}:3001"
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+
+  client:
+    build:
+      context: ./codehub-react
+      dockerfile: Dockerfile
+    container_name: codehub-client
+    restart: unless-stopped
+    depends_on:
+      - server
+    environment:
+      VITE_API_URL: http://localhost:${BACKEND_PORT:-3001}
+      CHOKIDAR_USEPOLLING: "true"
+    working_dir: /app
+    command: npm run dev -- --host 0.0.0.0 --port 5173
+    ports:
+      - "${FRONTEND_PORT:-5173}:5173"
+    volumes:
+      - ./codehub-react:/app
+      - /app/node_modules
+
 volumes:
   postgres_data:

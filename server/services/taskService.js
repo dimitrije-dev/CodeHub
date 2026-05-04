@@ -1,5 +1,6 @@
 import { pool } from '../config/database.js'
 import { AchievementService } from './achievementService.js'
+import { notFound } from '../utils/errors.js'
 
 export class TaskService {
   static async getTasks(userId) {
@@ -51,9 +52,7 @@ export class TaskService {
     
     const result = await pool.query(query, [title, description, status, priority, due_date, taskId, userId])
     
-    if (result.rows.length === 0) {
-      throw new Error('Task not found')
-    }
+    if (result.rows.length === 0) throw notFound('Task not found')
     
     const updatedTask = result.rows[0]
     
@@ -78,9 +77,7 @@ export class TaskService {
     
     const result = await pool.query(query, [taskId, userId])
     
-    if (result.rows.length === 0) {
-      throw new Error('Task not found')
-    }
+    if (result.rows.length === 0) throw notFound('Task not found')
     
     return result.rows[0]
   }

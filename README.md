@@ -22,7 +22,7 @@ It combines task management, snippet organization, Pomodoro focus sessions, and 
 You can plan your day, stay in focus blocks, track momentum, and keep reusable code close, without juggling multiple tools.
 
 ## Technical Improvements In This Release
-This release introduces a full frontend stabilization and architecture-level cleanup.
+This release introduces a full frontend stabilization plus backend architecture hardening.
 
 - Refactored UI structure into a consistent design system with shared layout, spacing, and reusable component classes.
 - Reworked key pages (`Dashboard`, `Tasks`, `Snippets`, `Pomodoro`, `Achievements`, `Profile`) to reduce inline styles and improve maintainability.
@@ -31,6 +31,8 @@ This release introduces a full frontend stabilization and architecture-level cle
 - Normalized auth state handling (`useSyncExternalStore` flow + storage synchronization) for more predictable login/logout behavior.
 - Fixed linting and state management issues across the frontend and validated production build output.
 - Added project asset structure for branded docs visuals (`docs/assets`) and app identity consistency.
+- Hardened backend request lifecycle with centralized error handling, structured validation, and stronger API security middleware.
+- Added Prisma foundation (`schema.prisma`, baseline migration, and generate/migrate scripts) for safer future schema evolution.
 
 ## Core Experience
 - **Dashboard Command Center**: quick overview of work, focus, progress, and momentum.
@@ -77,6 +79,28 @@ codehub-fullstack-main/
 ```
 
 ## Getting Started
+### Full Docker (Frontend + Backend + Database)
+Run everything with one command:
+
+```bash
+npm run docker:up
+```
+
+Stop all containers:
+```bash
+npm run docker:down
+```
+
+Follow logs:
+```bash
+npm run docker:logs
+```
+
+If your local ports are already in use, run Docker on custom ports:
+```bash
+BACKEND_PORT=3002 FRONTEND_PORT=5174 npm run docker:up
+```
+
 ### 1. Install dependencies
 ```bash
 npm run install:all
@@ -90,6 +114,12 @@ npm run db:up
 ### 3. Initialize schema and demo data
 ```bash
 npm run db:setup
+```
+
+### 3.5 Generate Prisma client
+```bash
+cd server
+npm run prisma:generate
 ```
 
 ### 4. Run frontend + backend
